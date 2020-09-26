@@ -24,6 +24,7 @@ namespace ASP.NET_Core.MvcWebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,9 +49,31 @@ namespace ASP.NET_Core.MvcWebApp
 
             app.UseEndpoints(endpoints =>
             {
+                System.Console.WriteLine("Helllo");
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "list_users",
+                    pattern: "{controller=User}/{action=Index}");
+                endpoints.MapControllerRoute(
+                    name: "user_profile",
+                    pattern: "{controller=Account}/{action=ManagementProfile}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "change_password",
+                    pattern: "{controller=Account}/{action=ChangePassword}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "account_login",
+                    pattern: "{controller=Account}/{action=Login}");
+                endpoints.MapControllerRoute(
+                    name: "forgot_password",
+                    pattern: "{controller=Account}/{action=ForgotPassword}");
+                endpoints.MapControllerRoute(
+                    name: "reset_password",
+                    pattern: "{controller=Account}/{action=ResetPassword}");
+                endpoints.MapControllerRoute(
+                    name: "reset_password",
+                    pattern: "{controller=Account}/{action=RegisterAccount}");
             });
         }
     }

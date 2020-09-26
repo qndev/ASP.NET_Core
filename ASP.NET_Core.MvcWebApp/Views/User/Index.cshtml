@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="row">
+    <div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Users</h3>
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                      </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 10px">#</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th style="width: 40px">Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1.</td>
+                <td>Dinh Quang</td>
+                <td>Nguyen</td>
+                <td>quangnd.hust@gmail.com</td>
+                <td><span class="badge bg-info">Admin</span></td>
+                <td><span class="badge bg-success">Active</span></td>
+                <td class="user-management">
+                    <div class="custom-control custom-switch custom-switch-off-danger custom-switch-on-success">
+                        <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                        <label id="label-lock-user" class="custom-control-label" for="customSwitch3"></label>
+                        <i id="user-info" class="fa fa-info-circle" aria-hidden="true"></i>
+                        <i id="delete-user" class="fa fa-trash" aria-hidden="true"></i>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        <div class="card-footer clearfix">
+        <ul class="pagination pagination-sm m-0 float-right">
+            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+        </ul>
+        </div>
+    </div>
+</div>
