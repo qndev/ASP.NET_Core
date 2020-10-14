@@ -1,6 +1,4 @@
-using System;
-
-namespace ASP.NET_Core.ApplicationCore.Entities
+namespace ASP.NET_Core.ApplicationCore.Entities.Common
 {
     public abstract class BaseEntity
     {

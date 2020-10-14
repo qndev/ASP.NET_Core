@@ -1,9 +1,9 @@
 using System;
-using ASP.NET_Core.ApplicationCore.Interfaces;
+using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
 {
-    public class Course : BaseEntity, IAuditedUserEntity, IAuditedTimeEntity
+    public class Course : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public int SubjectId { get; set; }
         public string Code { get; set; }
@@ -17,8 +17,8 @@ namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
         public Byte Status { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime DeletedAt { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime? LastModificationTime { get; set; }
+        public DateTime? DeletionTime { get; set; }
     }
 }

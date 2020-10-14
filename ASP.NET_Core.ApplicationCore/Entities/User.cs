@@ -1,9 +1,9 @@
 using System;
-using ASP.NET_Core.ApplicationCore.Interfaces;
+using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
-    public class User : BaseEntity, IAuditedTimeEntity, IAuditedUserEntity
+    public class User : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -19,8 +19,8 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public string RememberToken { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime DeletedAt { get; set; }
+        public DateTime CreationTime { get; set; }
+        public DateTime? DeletionTime { get; set; }
+        public DateTime? LastModificationTime { get; set; }
     }
 }
