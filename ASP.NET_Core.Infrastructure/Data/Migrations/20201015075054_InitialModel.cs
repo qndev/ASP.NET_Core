@@ -8,12 +8,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "elc");
-
             migrationBuilder.CreateTable(
                 name: "Answers",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -32,8 +28,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnswerUser",
-                schema: "elc",
+                name: "AnswerUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -49,12 +44,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnswerUser", x => x.Id);
+                    table.PrimaryKey("PK_AnswerUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Comments",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -74,8 +68,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseLecture",
-                schema: "elc",
+                name: "CourseLectures",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -91,12 +84,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseLecture", x => x.Id);
+                    table.PrimaryKey("PK_CourseLectures", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Courses",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -123,8 +115,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CourseUser",
-                schema: "elc",
+                name: "CourseUsers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -141,12 +132,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseUser", x => x.Id);
+                    table.PrimaryKey("PK_CourseUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Exercises",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -166,7 +156,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Faqs",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -188,7 +177,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Lectures",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -210,7 +198,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "News",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -230,7 +217,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Questions",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -250,7 +236,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Subjects",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -269,7 +254,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Users",
-                schema: "elc",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -301,56 +285,43 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Answers",
-                schema: "elc");
+                name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "AnswerUser",
-                schema: "elc");
+                name: "AnswerUsers");
 
             migrationBuilder.DropTable(
-                name: "Comments",
-                schema: "elc");
+                name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "CourseLecture",
-                schema: "elc");
+                name: "CourseLectures");
 
             migrationBuilder.DropTable(
-                name: "Courses",
-                schema: "elc");
+                name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "CourseUser",
-                schema: "elc");
+                name: "CourseUsers");
 
             migrationBuilder.DropTable(
-                name: "Exercises",
-                schema: "elc");
+                name: "Exercises");
 
             migrationBuilder.DropTable(
-                name: "Faqs",
-                schema: "elc");
+                name: "Faqs");
 
             migrationBuilder.DropTable(
-                name: "Lectures",
-                schema: "elc");
+                name: "Lectures");
 
             migrationBuilder.DropTable(
-                name: "News",
-                schema: "elc");
+                name: "News");
 
             migrationBuilder.DropTable(
-                name: "Questions",
-                schema: "elc");
+                name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Subjects",
-                schema: "elc");
+                name: "Subjects");
 
             migrationBuilder.DropTable(
-                name: "Users",
-                schema: "elc");
+                name: "Users");
         }
     }
 }

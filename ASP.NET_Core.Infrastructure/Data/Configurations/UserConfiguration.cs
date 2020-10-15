@@ -8,7 +8,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
     {
         public override void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.ToTable("Users", InfrastructureContext.DEFAULT_SCHEMA);
+            base.Configure(builder);
+            builder.ToTable("Users");
         }
     }
 }

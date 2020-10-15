@@ -3,7 +3,7 @@ using ASP.NET_Core.ApplicationCore.Entities;
 using ASP.NET_Core.ApplicationCore.Entities.CourseAggregate;
 using ASP.NET_Core.ApplicationCore.Entities.LectureAggregate;
 using ASP.NET_Core.Infrastructure.Data.Configurations;
-
+using System.Reflection;
 
 namespace ASP.NET_Core.Infrastructure.Data
 {
@@ -29,19 +29,21 @@ namespace ASP.NET_Core.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new AnswerConfiguration());
-            modelBuilder.ApplyConfiguration(new AnswerUserConfiguration());
-            modelBuilder.ApplyConfiguration(new CommentConfiguration());
-            modelBuilder.ApplyConfiguration(new CourseConfiguration());
-            modelBuilder.ApplyConfiguration(new CourseLectureConfiguration());
-            modelBuilder.ApplyConfiguration(new CourseUserConfiguration());
-            modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
-            modelBuilder.ApplyConfiguration(new FaqConfiguration());
-            modelBuilder.ApplyConfiguration(new LectureConfiguration());
-            modelBuilder.ApplyConfiguration(new NewsConfiguration());
-            modelBuilder.ApplyConfiguration(new QuestionConfiguration());
-            modelBuilder.ApplyConfiguration(new SubjectConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            // modelBuilder.ApplyConfiguration(new AnswerConfiguration());
+            // modelBuilder.ApplyConfiguration(new AnswerUserConfiguration());
+            // modelBuilder.ApplyConfiguration(new CommentConfiguration());
+            // modelBuilder.ApplyConfiguration(new CourseConfiguration());
+            // modelBuilder.ApplyConfiguration(new CourseLectureConfiguration());
+            // modelBuilder.ApplyConfiguration(new CourseUserConfiguration());
+            // modelBuilder.ApplyConfiguration(new ExerciseConfiguration());
+            // modelBuilder.ApplyConfiguration(new FaqConfiguration());
+            // modelBuilder.ApplyConfiguration(new LectureConfiguration());
+            // modelBuilder.ApplyConfiguration(new NewsConfiguration());
+            // modelBuilder.ApplyConfiguration(new QuestionConfiguration());
+            // modelBuilder.ApplyConfiguration(new SubjectConfiguration());
+            // modelBuilder.ApplyConfiguration(new UserConfiguration());
+
         }
     }
 }

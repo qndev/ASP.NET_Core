@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(InfrastructureContext))]
-    [Migration("20201015050126_InitialModel")]
+    [Migration("20201015075054_InitialModel")]
     partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AnswerUser","elc");
+                    b.ToTable("AnswerUsers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Comment", b =>
@@ -86,7 +86,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments","elc");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", b =>
@@ -142,7 +142,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Courses","elc");
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", b =>
@@ -171,7 +171,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subjects","elc");
+                    b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseLecture", b =>
@@ -206,7 +206,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseLecture","elc");
+                    b.ToTable("CourseLectures");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseUser", b =>
@@ -244,7 +244,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseUser","elc");
+                    b.ToTable("CourseUsers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Faq", b =>
@@ -282,7 +282,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Faqs","elc");
+                    b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", b =>
@@ -314,7 +314,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Answers","elc");
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", b =>
@@ -346,7 +346,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Exercises","elc");
+                    b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", b =>
@@ -384,7 +384,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Lectures","elc");
+                    b.ToTable("Lectures");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", b =>
@@ -416,7 +416,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions","elc");
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.News", b =>
@@ -448,7 +448,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("News","elc");
+                    b.ToTable("News");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.User", b =>
@@ -510,7 +510,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users","elc");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }
