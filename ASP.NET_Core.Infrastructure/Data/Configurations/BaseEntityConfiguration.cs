@@ -11,7 +11,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.HasKey(b => b.Id);
             builder.Property(b => b.Id)
                 .ValueGeneratedOnAdd();
-            IHasCreationTime obj = (IHasCreationTime)builder;
         }
     }
 }

@@ -4,14 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class AnswerUserConfiguration : IEntityTypeConfiguration<AnswerUser>
+    public class AnswerUserConfiguration : BaseEntityConfiguration<AnswerUser>
     {
-        public void Configure(EntityTypeBuilder<AnswerUser> builder)
+        public override void Configure(EntityTypeBuilder<AnswerUser> builder)
         {
-            builder.ToTable("answer_user", InfrastructureContext.DEFAULT_SCHEMA);
-            builder.HasKey(b => b.Id);
-            builder.Property(b => b.Id)
-                .ValueGeneratedOnAdd();
+            builder.ToTable("AnswerUser", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

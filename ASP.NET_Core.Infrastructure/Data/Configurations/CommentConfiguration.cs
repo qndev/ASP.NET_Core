@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class CommentConfiguration : IEntityTypeConfiguration<Comment>
+    public class CommentConfiguration : BaseEntityConfiguration<Comment>
     {
-        public void Configure(EntityTypeBuilder<Comment> builder)
+        public override void Configure(EntityTypeBuilder<Comment> builder)
         {
-            builder.ToTable("comments", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("Comments", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

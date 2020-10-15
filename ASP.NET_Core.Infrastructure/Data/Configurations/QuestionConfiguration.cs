@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities.LectureAggregate;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class QuestionConfiguration : IEntityTypeConfiguration<Question>
+    public class QuestionConfiguration : BaseEntityConfiguration<Question>
     {
-        public void Configure(EntityTypeBuilder<Question> builder)
+        public override void Configure(EntityTypeBuilder<Question> builder)
         {
-            builder.ToTable("questions", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("Questions", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class CourseUserConfiguration : IEntityTypeConfiguration<CourseUser>
+    public class CourseUserConfiguration : BaseEntityConfiguration<CourseUser>
     {
-        public void Configure(EntityTypeBuilder<CourseUser> builder)
+        public override void Configure(EntityTypeBuilder<CourseUser> builder)
         {
-            builder.ToTable("course_user", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("CourseUser", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

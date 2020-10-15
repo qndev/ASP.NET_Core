@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities.CourseAggregate;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
+    public class SubjectConfiguration : BaseEntityConfiguration<Subject>
     {
-        public void Configure(EntityTypeBuilder<Subject> builder)
+        public override void Configure(EntityTypeBuilder<Subject> builder)
         {
-            builder.ToTable("subjects", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("Subjects", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class CourseLectureConfiguration : IEntityTypeConfiguration<CourseLecture>
+    public class CourseLectureConfiguration : BaseEntityConfiguration<CourseLecture>
     {
-        public void Configure(EntityTypeBuilder<CourseLecture> builder)
+        public override void Configure(EntityTypeBuilder<CourseLecture> builder)
         {
-            builder.ToTable("course_lecture", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("CourseLecture", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

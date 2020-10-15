@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class NewsConfiguration : IEntityTypeConfiguration<News>
+    public class NewsConfiguration : BaseEntityConfiguration<News>
     {
-        public void Configure(EntityTypeBuilder<News> builder)
+        public override void Configure(EntityTypeBuilder<News> builder)
         {
-            builder.ToTable("news", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("News", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }

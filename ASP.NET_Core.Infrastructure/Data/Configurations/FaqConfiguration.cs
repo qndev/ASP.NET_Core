@@ -4,11 +4,11 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class FaqConfiguration : IEntityTypeConfiguration<Faq>
+    public class FaqConfiguration : BaseEntityConfiguration<Faq>
     {
-        public void Configure(EntityTypeBuilder<Faq> builder)
+        public override void Configure(EntityTypeBuilder<Faq> builder)
         {
-            builder.ToTable("faqs", InfrastructureContext.DEFAULT_SCHEMA);
+            builder.ToTable("Faqs", InfrastructureContext.DEFAULT_SCHEMA);
         }
     }
 }
