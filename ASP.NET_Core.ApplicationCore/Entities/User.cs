@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
+using ASP.NET_Core.ApplicationCore.Entities.CourseAggregate;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
@@ -22,5 +24,11 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public DateTime CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
+         public  ICollection<Comment> Comments { get; set; }
+        public  ICollection<Subject> Subjects { get; set; }
+        public  ICollection<CourseUser> CourseUsers { get; set; }
+        public  ICollection<AnswerUser> AnswerUsers { get; set; }
+        public  ICollection<Faq> Faqs { get; set; }
+        public  ICollection<News> News { get; set; }
     }
 }

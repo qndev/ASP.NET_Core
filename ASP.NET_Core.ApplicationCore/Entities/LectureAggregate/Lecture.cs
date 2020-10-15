@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.LectureAggregate
@@ -14,5 +15,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities.LectureAggregate
         public DateTime CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
+        public ICollection<CourseLecture> CourseLectures { get; set; }
+        public ICollection<Exercise> Exercises { get; set; }
     }
 }

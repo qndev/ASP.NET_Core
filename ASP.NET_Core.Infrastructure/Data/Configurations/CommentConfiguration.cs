@@ -10,6 +10,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Comments");
+            builder.HasOne(c => c.User)
+                .WithMany(u => u.Comments);
         }
     }
 }

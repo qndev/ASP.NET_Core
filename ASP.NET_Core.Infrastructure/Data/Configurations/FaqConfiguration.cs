@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Faqs");
+            builder.HasOne(f => f.User)
+                .WithMany(u => u.Faqs)
+                .HasForeignKey(f => f.CreatedBy);
         }
     }
 }

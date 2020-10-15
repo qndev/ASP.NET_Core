@@ -10,6 +10,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("AnswerUser");
+            builder.HasOne(au => au.Answer)
+                .WithMany(a => a.AnswerUsers);
         }
     }
 }

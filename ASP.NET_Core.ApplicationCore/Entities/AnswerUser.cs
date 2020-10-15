@@ -1,5 +1,6 @@
 using System;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
+using ASP.NET_Core.ApplicationCore.Entities.LectureAggregate;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
@@ -13,5 +14,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public DateTime CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
+        public Answer Answer { get; set; }
+        public User User { get; set; }
     }
 }
