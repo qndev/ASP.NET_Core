@@ -11,7 +11,17 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             base.Configure(builder);
             builder.ToTable("AnswerUser");
             builder.HasOne(au => au.Answer)
-                .WithMany(a => a.AnswerUsers);
+                .WithMany(a => a.AnswerUsers)
+                .HasForeignKey(au => au.AnswerId);
+            builder.HasOne(au => au.User)
+                .WithMany(u => u.AnswerUsers)
+                .HasForeignKey(au => au.UserId);;
+            builder.Property(au => au.CourseId)
+                .IsRequired();
+            builder.Property(au => au.LectureId)
+                .IsRequired();
+            builder.Property(au => au.QuestionId)
+                .IsRequired();
         }
     }
 }

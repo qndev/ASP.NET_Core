@@ -16,6 +16,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.HasOne(cu => cu.User)
                 .WithMany(u => u.CourseUsers)
                 .HasForeignKey(cu => cu.UserId);
+            builder.Property(cu => cu.OrderStatus)
+                .HasColumnType("tinyint(4)")
+                .IsRequired();
+            builder.Property(cu => cu.OrderDateTime)
+                .HasColumnType("timestamp")
+                .IsRequired();
+            builder.Property(cu => cu.PaymentDateTime)
+                .HasColumnType("timestamp");
         }
     }
 }

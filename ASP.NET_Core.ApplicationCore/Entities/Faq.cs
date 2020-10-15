@@ -5,10 +5,8 @@ namespace ASP.NET_Core.ApplicationCore.Entities
 {
     public class Faq : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
-        public int Question { get; set; }
+        public string Question { get; set; }
         public string Answer { get; set; }
-        public Byte Type { get; set; }
-        public DateTime DoccumentUrl { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime CreationTime { get; set; }

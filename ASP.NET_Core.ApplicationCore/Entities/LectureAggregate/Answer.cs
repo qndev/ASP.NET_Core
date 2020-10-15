@@ -8,7 +8,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities.LectureAggregate
     {
         public int QuestionId { get; set; }
         public string Content { get; set; }
-        public string CorrectFlag { get; set; }
+        public bool CorrectFlag { get; set; }
         public int OrderNumber { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }

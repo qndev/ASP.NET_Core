@@ -15,6 +15,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasForeignKey(s => s.CreatedBy);
             builder.HasMany(s => s.Courses)
                 .WithOne(c => c.Subject);
+            builder.Property(s => s.Name)
+                .HasColumnType("varchar(255)")
+                .IsRequired();
+            builder.Property(l => l.CreatedBy)
+                .IsRequired();
         }
     }
 }

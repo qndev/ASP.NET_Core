@@ -11,7 +11,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             base.Configure(builder);
             builder.ToTable("Comments");
             builder.HasOne(c => c.User)
-                .WithMany(u => u.Comments);
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId);
+            builder.Property(c => c.CommentContent)
+                .HasColumnType("text")
+                .IsRequired();
+            builder.Property(c => c.CourseId)
+                .IsRequired();
+            builder.Property(c => c.LectureId)
+                .IsRequired();
         }
     }
 }

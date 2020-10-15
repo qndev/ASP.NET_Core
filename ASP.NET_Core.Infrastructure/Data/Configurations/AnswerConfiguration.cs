@@ -15,6 +15,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasForeignKey(a => a.QuestionId);
             builder.HasMany(a => a.AnswerUsers)
                 .WithOne(au => au.Answer);
+            builder.Property(a => a.Content)
+                .IsRequired();
+            builder.Property(a => a.CorrectFlag)
+                .IsRequired();
+            builder.Property(a => a.OrderNumber)
+                .HasColumnType("tinyint(4)")
+                .IsRequired();
         }
     }
 }

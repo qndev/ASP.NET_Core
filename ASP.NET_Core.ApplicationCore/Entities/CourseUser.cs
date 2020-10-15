@@ -11,7 +11,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public Byte OrderStatus { get; set; }
         public Byte OrderType { get; set; }
         public DateTime OrderDateTime { get; set; }
-        public DateTime PaymentDateTime { get; set; }
+        public DateTime? PaymentDateTime { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }

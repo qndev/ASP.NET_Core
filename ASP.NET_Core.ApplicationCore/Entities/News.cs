@@ -5,7 +5,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities
 {
     public class News : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
-        public int Title { get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }

@@ -13,6 +13,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.HasOne(f => f.User)
                 .WithMany(u => u.Faqs)
                 .HasForeignKey(f => f.CreatedBy);
+            builder.Property(f => f.Answer)
+                .HasColumnType("text")
+                .IsRequired();
+            builder.Property(f => f.Question)
+                .HasColumnType("text")
+                .IsRequired();
         }
     }
 }

@@ -15,6 +15,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasForeignKey(e => e.LectureId);
             builder.HasMany(e => e.Questions)
                 .WithOne(q => q.Exercise);
+            builder.Property(e => e.Title)
+                .HasColumnType("text")
+                .IsRequired();
+            builder.Property(e => e.Description)
+                .HasColumnType("text")
+                .IsRequired(false);
+            builder.Property(e => e.OrderNumber)
+                .IsRequired();
         }
     }
 }
