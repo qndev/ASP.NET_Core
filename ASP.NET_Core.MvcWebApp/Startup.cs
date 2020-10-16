@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using ASP.NET_Core.Infrastructure.Data;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -19,6 +21,20 @@ namespace ASP.NET_Core.MvcWebApp
         }
 
         public IConfiguration Configuration { get; }
+
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            // use real database
+            ConfigureProductionServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            services.AddDbContext<InfrastructureContext>(c =>
+                c.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
+            ConfigureServices(services);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
