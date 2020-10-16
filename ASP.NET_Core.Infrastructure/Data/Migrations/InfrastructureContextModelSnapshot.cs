@@ -32,7 +32,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -74,7 +74,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -114,7 +114,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -180,7 +180,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -214,7 +214,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -249,7 +249,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -297,7 +297,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -335,7 +335,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -365,7 +365,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -405,7 +405,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -448,7 +448,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -489,7 +489,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -526,7 +526,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime>("CreationTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -536,7 +536,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.Property<DateTime?>("EmailVerifiedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

@@ -49,6 +49,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.Property(u => u.RememberToken)
                 .HasColumnType("varchar(25)")
                 .IsRequired(false);
+            builder.Property(u => u.EmailVerifiedAt)
+                .HasColumnType("timestamp");
         }
     }
 }

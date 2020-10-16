@@ -13,7 +13,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .ValueGeneratedOnAdd();
             builder.Property(a => a.CreationTime)
                 .HasColumnType("timestamp")
-                .HasDefaultValueSql("getdate()");
+                .HasDefaultValueSql("now()");
             builder.Property(a => a.DeletionTime)
                 .HasColumnType("timestamp");
             builder.Property(a => a.LastModificationTime)
