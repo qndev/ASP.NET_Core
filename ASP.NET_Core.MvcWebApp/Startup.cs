@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ASP.NET_Core.Infrastructure.Data;
+using ASP.NET_Core.Infrastructure.Identity;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -32,7 +33,9 @@ namespace ASP.NET_Core.MvcWebApp
         {
             services.AddDbContext<InfrastructureContext>(c =>
                 c.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-
+            // Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
             ConfigureServices(services);
         }
 
