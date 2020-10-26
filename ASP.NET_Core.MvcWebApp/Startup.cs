@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ASP.NET_Core.Infrastructure.Data;
+using ASP.NET_Core.Infrastructure.Identity;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -32,13 +33,17 @@ namespace ASP.NET_Core.MvcWebApp
         {
             services.AddDbContext<InfrastructureContext>(c =>
                 c.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-
+            // Identity DbContext
+            services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
             ConfigureServices(services);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
         }
@@ -60,7 +65,7 @@ namespace ASP.NET_Core.MvcWebApp
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
