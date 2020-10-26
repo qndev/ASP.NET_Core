@@ -22,19 +22,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .WithOne(cu => cu.User);
             builder.HasMany(u => u.AnswerUsers)
                 .WithOne(au => au.User);
+            builder.Property(u => u.IdentityUserId)
+                .IsRequired();
             builder.Property(u => u.FirstName)
                 .HasColumnType("varchar(50)")
                 .IsRequired();
             builder.Property(u => u.LastName)
                 .HasColumnType("varchar(50)")
-                .IsRequired();
-            builder.Property(u => u.Email)
-                .HasColumnType("varchar(50)")
-                .IsRequired();
-            builder.Property(u => u.Password)
-                .HasColumnType("varchar(255)")
-                .IsRequired();
-            builder.Property(u => u.Type)
                 .IsRequired();
             builder.Property(u => u.Phone)
                 .HasColumnType("varchar(25)")
@@ -44,13 +38,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.Property(u => u.ImageUrl)
                 .HasColumnType("varchar(25)")
                 .IsRequired(false);
-            builder.Property(u => u.Status)
-                .IsRequired();
-            builder.Property(u => u.RememberToken)
-                .HasColumnType("varchar(25)")
-                .IsRequired(false);
-            builder.Property(u => u.EmailVerifiedAt)
-                .HasColumnType("timestamp");
         }
     }
 }

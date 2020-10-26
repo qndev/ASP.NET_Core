@@ -17,7 +17,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         {
             _logger = logger;
         }
-
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
