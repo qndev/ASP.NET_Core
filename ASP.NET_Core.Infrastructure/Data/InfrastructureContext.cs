@@ -43,7 +43,6 @@ namespace ASP.NET_Core.Infrastructure.Data
             // modelBuilder.ApplyConfiguration(new QuestionConfiguration());
             // modelBuilder.ApplyConfiguration(new SubjectConfiguration());
             // modelBuilder.ApplyConfiguration(new UserConfiguration());
-
         }
     }
 }
