@@ -90,9 +90,34 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
-        public IActionResult ChangePassword()
+        [HttpGet]
+        public IActionResult ChangePassword(string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View("ChangePassword");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    _logger.LogInformation("User not found!");
+                    return View("Error");
+                }
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Changed Password!");
+                    return RedirectToLocal("/Account/ChangePassword");
+                }
+            }
+
+            return View("Error");
         }
 
         public IActionResult ForgotPassword()
