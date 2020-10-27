@@ -29,7 +29,7 @@ namespace ASP.NET_Core.MvcWebApp.Services
 			mimeMessage.From.Add(new MailboxAddress(_mailKitOptions.MailName, _mailKitOptions.MailUserName));
 			mimeMessage.To.Add(new MailboxAddress(email, email));
 			mimeMessage.Subject = subject;
-			mimeMessage.Body = new TextPart("plain") {
+			mimeMessage.Body = new TextPart("html") {
 				Text = message
 			};
 
