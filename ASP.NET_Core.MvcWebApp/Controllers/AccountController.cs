@@ -52,6 +52,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    // await _emailSender.SendEmailAsync("quangnd.hust@gmail.com", "Test MailKitSender", "Hello World!");
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.IsLockedOut)
