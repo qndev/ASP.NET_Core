@@ -70,6 +70,15 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            return RedirectToAction(nameof(AccountController.Login), "Account");
+        }
+
         public IActionResult ChangePassword()
         {
             return View("ChangePassword");
