@@ -27,3 +27,8 @@ dotnet ef database update -c InfrastructureContext -p ../ASP.NET_Core.Infrastruc
 ```
 dotnet ef database update -c AppIdentityDbContext -p ../ASP.NET_Core.Infrastructure/ASP.NET_Core.Infrastructure.csproj -s ASP.NET_Core.MvcWebApp.csproj
 ```
+## CLI
+### dotnet add reference
+```
+dotnet add ASP.NET_Core.MvcWebApp.csproj reference ../ASP.NET_Core.ApplicationCore/ASP.NET_Core.ApplicationCore.csproj
+```
