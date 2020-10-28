@@ -48,6 +48,17 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    _logger.LogInformation("Exist user email");
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        _logger.LogInformation("User has not been verified!");
+                        return RedirectToLocal("/Account/Login");
+                    }
+                }
+                _logger.LogInformation("User has been verified!");
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
@@ -79,19 +90,113 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
-        public IActionResult ChangePassword()
+        [HttpGet]
+        public IActionResult ChangePassword(string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View("ChangePassword");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model, string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    _logger.LogInformation("User not found!");
+                    return View("Error");
+                }
+                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Changed Password!");
+                    return RedirectToLocal("/Account/ChangePassword");
+                }
+            }
+
+            return View("Error");
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View("ForgotPassword");
         }
 
-        public IActionResult ResetPassword()
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            return View("ResetPassword");
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return View("404");
+                }
+                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                {
+                    _logger.LogInformation("User has not been verified!");
+                    return View("VerifyEmail");
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+                   "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
+                return View("ForgotPasswordConfirmation");
+            }
+
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string code = null)
+        {
+            return code == null ? View("Error") : View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
+            }
+            AddErrors(result);
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
         }
 
         [HttpGet]
@@ -114,14 +219,35 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
+                        "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    // await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToLocal("/Account/Login");
                 }
                 AddErrors(result);
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return View("Error");
+            }
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return View("Error");
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+            return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
         #region Helpers
