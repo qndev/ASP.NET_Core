@@ -1,6 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Error";
+    Layout = "_AccountLayout";
 }
-
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<div id="error-message">
+    <h2 class="text-danger">Error.</h2>
+    <h3 class="text-danger">An error occurred while processing your request.</h3>
+    <h4>
+        <a asp-controller="Account" asp-action="Login">Click here to Log in</a>
+    </h4>
+</div>
