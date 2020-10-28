@@ -5,11 +5,11 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 using System.Threading.Tasks;
-using ASP.NET_Core.MvcWebApp.Interfaces;
+using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
-namespace ASP.NET_Core.MvcWebApp.Services
+namespace ASP.NET_Core.Infrastructure.Services
 {
     public class EmailSender : IEmailSender
     {

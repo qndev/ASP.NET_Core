@@ -1,4 +1,4 @@
-namespace ASP.NET_Core.MvcWebApp.Services
+namespace ASP.NET_Core.Infrastructure.Services
 {
     public class MailKitServiceOptions
     {

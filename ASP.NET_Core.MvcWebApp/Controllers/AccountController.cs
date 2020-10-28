@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ASP.NET_Core.MvcWebApp.Models.AccountViewModels;
 using Microsoft.Extensions.Logging;
-using ASP.NET_Core.MvcWebApp.Interfaces;
+using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Identity;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers

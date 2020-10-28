@@ -12,8 +12,8 @@ using Microsoft.Extensions.Hosting;
 using ASP.NET_Core.Infrastructure.Data;
 using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using ASP.NET_Core.MvcWebApp.Interfaces;
-using ASP.NET_Core.MvcWebApp.Services;
+using ASP.NET_Core.ApplicationCore.Interfaces;
+using ASP.NET_Core.Infrastructure.Services;
 
 namespace ASP.NET_Core.MvcWebApp
 {
