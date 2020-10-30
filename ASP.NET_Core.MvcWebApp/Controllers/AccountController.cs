@@ -12,17 +12,20 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
+            IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
+            _identityService = identityService;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -48,34 +51,12 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                if (await _identityService.LoginAsync(model.Email, model.Password, model.RememberMe))
                 {
-                    _logger.LogInformation("Exist user email");
-                    if (!await _userManager.IsEmailConfirmedAsync(user))
-                    {
-                        _logger.LogInformation("User has not been verified!");
-                        return RedirectToLocal("/Account/Login");
-                    }
-                }
-                _logger.LogInformation("User has been verified!");
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, "User logged in.");
-                    // await _emailSender.SendEmailAsync("quangnd.hust@gmail.com", "Test MailKitSender", "Hello World!");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+                ModelState.AddModelError(string.Empty, "Something went wrong! Please verify your email address and login again.");
+                return View(model);
             }
 
             return View(model);

@@ -87,6 +87,7 @@ namespace ASP.NET_Core.MvcWebApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IIdentityService, IdentityService>();
             services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
