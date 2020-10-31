@@ -1,8 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Interfaces;
-using Microsoft.AspNetCore.Http;
+using ASP.NET_Core.ApplicationCore.Constants;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
@@ -71,6 +72,26 @@ namespace ASP.NET_Core.Infrastructure.Identity
             }
             _logger.LogInformation("User not found!");
             return false;
+        }
+
+        public async Task<(string, int)> ForgotPasswordAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            string responseMessage = "";
+            int userId = user.Id;
+            if (user == null)
+            {
+                responseMessage = ResponseMessage.USER_NOT_FOUND;
+                return (responseMessage, userId);
+            }
+            if (!(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                responseMessage = ResponseMessage.EMAIL_NOT_CONFIRMED;
+                _logger.LogInformation("User has not been verified!");
+                return (responseMessage, userId);
+            }
+            responseMessage = await _userManager.GeneratePasswordResetTokenAsync(user);
+            return (responseMessage, userId);
         }
     }
 }

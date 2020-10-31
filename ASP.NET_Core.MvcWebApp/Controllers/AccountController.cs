@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
+using ASP.NET_Core.ApplicationCore.Constants;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -117,19 +118,18 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
+                var result = _identityService.ForgotPasswordAsync(model.Email);
+                var respone = result.Result;
+
+                if (respone.Item1.Equals(ResponseMessage.USER_NOT_FOUND))
                 {
                     return View("404");
                 }
-                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                if (respone.Item1.Equals(ResponseMessage.EMAIL_NOT_CONFIRMED))
                 {
-                    _logger.LogInformation("User has not been verified!");
                     return View("VerifyEmail");
                 }
-
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = respone.Item2, code = result }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 return View("ForgotPasswordConfirmation");
