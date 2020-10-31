@@ -14,6 +14,7 @@ using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -90,6 +91,7 @@ namespace ASP.NET_Core.MvcWebApp
             services.AddScoped<IIdentityService, IdentityService>();
             services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddMvc();

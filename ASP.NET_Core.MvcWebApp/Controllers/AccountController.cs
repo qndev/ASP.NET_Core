@@ -6,12 +6,14 @@ using ASP.NET_Core.MvcWebApp.Models.AccountViewModels;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Identity;
+using Microsoft.AspNetCore.Http;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -19,12 +21,14 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         private readonly ILogger _logger;
 
         public AccountController(
+            IHttpContextAccessor httpContextAccessor,
             IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
+            _httpContextAccessor = httpContextAccessor;
             _identityService = identityService;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -66,8 +70,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            await _identityService.LogoutAsync();
             return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
@@ -84,18 +87,17 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
+                var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+                 _logger.LogInformation(userName);
+                if (model.Email == userName)
                 {
-                    _logger.LogInformation("User not found!");
-                    return View("Error");
+                    if (await _identityService.ChangePasswordAsync(model.Email, model.CurrentPassword, model.NewPassword))
+                    {
+                        return RedirectToLocal("/Account/ChangePassword");
+                    }
+                    return View("404");
                 }
-                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("Changed Password!");
-                    return RedirectToLocal("/Account/ChangePassword");
-                }
+                return View("403");
             }
 
             return View("Error");

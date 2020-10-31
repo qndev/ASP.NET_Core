@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
@@ -45,6 +46,30 @@ namespace ASP.NET_Core.Infrastructure.Identity
                 return false;
             }
             _logger.LogWarning(2, "Invalid login attempt.");
+            return false;
+        }
+
+        public async Task LogoutAsync()
+        {
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+        }
+
+        public async Task<bool> ChangePasswordAsync(string email, string currentPassword, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Changed Password!");
+                    return true;
+                }
+                _logger.LogInformation("Something went wrong!");
+                return false;
+            }
+            _logger.LogInformation("User not found!");
             return false;
         }
     }
