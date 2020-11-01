@@ -118,18 +118,18 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = _identityService.ForgotPasswordAsync(model.Email);
-                var respone = result.Result;
+                var result = await _identityService.ForgotPasswordAsync(model.Email);
+                // var respone = result.Result;
 
-                if (respone.Item1.Equals(ResponseMessage.USER_NOT_FOUND))
+                if (result.Item1.Equals(ResponseMessage.USER_NOT_FOUND))
                 {
                     return View("404");
                 }
-                if (respone.Item1.Equals(ResponseMessage.EMAIL_NOT_CONFIRMED))
+                if (result.Item1.Equals(ResponseMessage.EMAIL_NOT_CONFIRMED))
                 {
                     return View("VerifyEmail");
                 }
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = respone.Item2, code = result }, protocol: HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Item2, code = result.Item1 }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 return View("ForgotPasswordConfirmation");
@@ -161,17 +161,15 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return View(model);
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            var resetPasswordResult = await _identityService.ResetPasswordAsync(model.Email, model.Code, model.Password);
+            if (resetPasswordResult.Equals(ResponseMessage.USER_NOT_FOUND))
+            {
+                return View("Error");
+            }
+            if (resetPasswordResult.Equals(ResponseMessage.SUCCESS_MESSAGE))
             {
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
             }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-            }
-            AddErrors(result);
             return View();
         }
 
@@ -198,19 +196,19 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var registerAccountResult = await _identityService.RegisterAccountAsync(model.Email, model.Email, model.Password);
+                if (registerAccountResult.Item1.Equals(ResponseMessage.SUCCESS_MESSAGE))
                 {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = registerAccountResult.Item2, code = registerAccountResult.Item1 }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     // await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal("/Account/Login");
                 }
-                AddErrors(result);
+                _logger.LogInformation(registerAccountResult.Item1);
+                return View("Error");
+                // AddErrors(result);
             }
 
             return View(model);
@@ -224,13 +222,16 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return View("Error");
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var confirmEmailResult = await _identityService.ConfirmEmailAsync(userId, code);
+            if (confirmEmailResult.Equals(ResponseMessage.USER_NOT_FOUND))
             {
                 return View("Error");
             }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (confirmEmailResult.Equals(ResponseMessage.SUCCESS_MESSAGE))
+            {
+                return View("ConfirmEmail");
+            }
+            return View("Error");
         }
 
         #region Helpers

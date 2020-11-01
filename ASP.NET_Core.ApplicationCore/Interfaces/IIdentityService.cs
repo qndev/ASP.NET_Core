@@ -8,5 +8,8 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
         Task LogoutAsync();
         Task<bool> ChangePasswordAsync(string email, string currentPassword, string newPassword);
         Task<(string, int)> ForgotPasswordAsync(string email);
+        Task<string> ResetPasswordAsync(string email, string token, string newPassword);
+        Task<(string, int)> RegisterAccountAsync(string userName, string email, string pasword);
+        Task<string> ConfirmEmailAsync(string userId, string token);
     }
 }

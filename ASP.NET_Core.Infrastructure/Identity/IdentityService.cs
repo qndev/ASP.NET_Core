@@ -82,7 +82,7 @@ namespace ASP.NET_Core.Infrastructure.Identity
             if (user == null)
             {
                 responseMessage = ResponseMessage.USER_NOT_FOUND;
-                return (responseMessage, userId);
+                return (responseMessage, ResponseMessage.ERROR_STATUS);
             }
             if (!(await _userManager.IsEmailConfirmedAsync(user)))
             {
@@ -92,6 +92,47 @@ namespace ASP.NET_Core.Infrastructure.Identity
             }
             responseMessage = await _userManager.GeneratePasswordResetTokenAsync(user);
             return (responseMessage, userId);
+        }
+
+        public async Task<string> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return ResponseMessage.USER_NOT_FOUND;
+            }
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            if (result.Succeeded)
+            {
+                return ResponseMessage.SUCCESS_MESSAGE;
+            }
+            return ResponseMessage.ERROR_MESSAGE;
+        }
+        public async Task<(string, int)> RegisterAccountAsync(string userName, string email, string password)
+        {
+            var user = new ApplicationUser { UserName = userName, Email = email };
+            var result = await _userManager.CreateAsync(user, password);
+            if (result.Succeeded)
+            {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                _logger.LogInformation("User created a new account with password.");
+                return (ResponseMessage.SUCCESS_MESSAGE, user.Id);
+            }
+            return (ResponseMessage.ERROR_MESSAGE, ResponseMessage.ERROR_STATUS);
+        }
+        public async Task<string> ConfirmEmailAsync(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return ResponseMessage.USER_NOT_FOUND;
+            }
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return ResponseMessage.SUCCESS_MESSAGE;
+            }
+            return ResponseMessage.ERROR_MESSAGE; 
         }
     }
 }
