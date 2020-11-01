@@ -12,8 +12,9 @@ using Microsoft.Extensions.Hosting;
 using ASP.NET_Core.Infrastructure.Data;
 using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
-using ASP.NET_Core.MvcWebApp.Interfaces;
-using ASP.NET_Core.MvcWebApp.Services;
+using ASP.NET_Core.ApplicationCore.Interfaces;
+using ASP.NET_Core.Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -87,8 +88,10 @@ namespace ASP.NET_Core.MvcWebApp
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IIdentityService, IdentityService>();
             services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
             services.AddMvc();

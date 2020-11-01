@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.MvcWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -18,6 +19,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             _logger = logger;
         }
         [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             return View();

@@ -4,25 +4,33 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using ASP.NET_Core.MvcWebApp.Models.AccountViewModels;
 using Microsoft.Extensions.Logging;
-using ASP.NET_Core.MvcWebApp.Interfaces;
+using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Identity;
+using Microsoft.AspNetCore.Http;
+using ASP.NET_Core.ApplicationCore.Constants;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
+            IHttpContextAccessor httpContextAccessor,
+            IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
+            _httpContextAccessor = httpContextAccessor;
+            _identityService = identityService;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -48,34 +56,12 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                if (await _identityService.LoginAsync(model.Email, model.Password, model.RememberMe))
                 {
-                    _logger.LogInformation("Exist user email");
-                    if (!await _userManager.IsEmailConfirmedAsync(user))
-                    {
-                        _logger.LogInformation("User has not been verified!");
-                        return RedirectToLocal("/Account/Login");
-                    }
-                }
-                _logger.LogInformation("User has been verified!");
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation(1, "User logged in.");
-                    // await _emailSender.SendEmailAsync("quangnd.hust@gmail.com", "Test MailKitSender", "Hello World!");
                     return RedirectToLocal(returnUrl);
                 }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning(2, "User account locked out.");
-                    return View("Lockout");
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View(model);
-                }
+                ModelState.AddModelError(string.Empty, "Something went wrong! Please verify your email address and login again.");
+                return View(model);
             }
 
             return View(model);
@@ -85,8 +71,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            await _identityService.LogoutAsync();
             return RedirectToAction(nameof(AccountController.Login), "Account");
         }
 
@@ -103,18 +88,17 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
+                var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+                 _logger.LogInformation(userName);
+                if (model.Email == userName)
                 {
-                    _logger.LogInformation("User not found!");
-                    return View("Error");
+                    if (await _identityService.ChangePasswordAsync(model.Email, model.CurrentPassword, model.NewPassword))
+                    {
+                        return RedirectToLocal("/Account/ChangePassword");
+                    }
+                    return View("404");
                 }
-                var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    _logger.LogInformation("Changed Password!");
-                    return RedirectToLocal("/Account/ChangePassword");
-                }
+                return View("403");
             }
 
             return View("Error");
@@ -134,19 +118,18 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
+                var result = await _identityService.ForgotPasswordAsync(model.Email);
+                // var respone = result.Result;
+
+                if (result.Item1.Equals(ResponseMessage.USER_NOT_FOUND))
                 {
                     return View("404");
                 }
-                if (!(await _userManager.IsEmailConfirmedAsync(user)))
+                if (result.Item1.Equals(ResponseMessage.EMAIL_NOT_CONFIRMED))
                 {
-                    _logger.LogInformation("User has not been verified!");
                     return View("VerifyEmail");
                 }
-
-                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Item2, code = result.Item1 }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 return View("ForgotPasswordConfirmation");
@@ -178,17 +161,15 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return View(model);
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            var resetPasswordResult = await _identityService.ResetPasswordAsync(model.Email, model.Code, model.Password);
+            if (resetPasswordResult.Equals(ResponseMessage.USER_NOT_FOUND))
+            {
+                return View("Error");
+            }
+            if (resetPasswordResult.Equals(ResponseMessage.SUCCESS_MESSAGE))
             {
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
             }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
-            }
-            AddErrors(result);
             return View();
         }
 
@@ -215,19 +196,19 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var registerAccountResult = await _identityService.RegisterAccountAsync(model.Email, model.Email, model.Password);
+                if (registerAccountResult.Item1.Equals(ResponseMessage.SUCCESS_MESSAGE))
                 {
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = registerAccountResult.Item2, code = registerAccountResult.Item1 }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     // await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal("/Account/Login");
                 }
-                AddErrors(result);
+                _logger.LogInformation(registerAccountResult.Item1);
+                return View("Error");
+                // AddErrors(result);
             }
 
             return View(model);
@@ -241,13 +222,16 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return View("Error");
             }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
+            var confirmEmailResult = await _identityService.ConfirmEmailAsync(userId, code);
+            if (confirmEmailResult.Equals(ResponseMessage.USER_NOT_FOUND))
             {
                 return View("Error");
             }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (confirmEmailResult.Equals(ResponseMessage.SUCCESS_MESSAGE))
+            {
+                return View("ConfirmEmail");
+            }
+            return View("Error");
         }
 
         #region Helpers

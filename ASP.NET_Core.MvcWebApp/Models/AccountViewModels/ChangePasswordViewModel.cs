@@ -10,7 +10,7 @@ namespace ASP.NET_Core.MvcWebApp.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Email *")]
+        [Display(Name = "Your Email *")]
         public string Email { get; set; }
 
         [Required]
