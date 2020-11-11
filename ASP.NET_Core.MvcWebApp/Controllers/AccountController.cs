@@ -17,6 +17,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
@@ -25,6 +26,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             IHttpContextAccessor httpContextAccessor,
             IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
@@ -32,6 +34,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             _httpContextAccessor = httpContextAccessor;
             _identityService = identityService;
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;

@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Identity;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
+using ASP.NET_Core.Infrastructure.Data.Repositories;
+using ASP.NET_Core.ApplicationCore.AutoMapper;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -89,11 +91,15 @@ namespace ASP.NET_Core.MvcWebApp
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
             services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
+            // AutoMapper
+            var mapperConfiguration = new AutoMapperConfiguration();
+            services.AddSingleton(mapperConfiguration.CreateMapper());
             services.AddMvc();
         }
 
