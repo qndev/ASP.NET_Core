@@ -3,14 +3,16 @@ using System;
 using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201113144940_ChangeUserTableName")]
+    partial class ChangeUserTableName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsUnique()
                         .HasName("RoleNameIndex");
 
-                    b.ToTable("ElcRoles");
+                    b.ToTable("ElcRolesTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRoleClaim", b =>
@@ -71,7 +73,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId1");
 
-                    b.ToTable("ElcRoleClaims");
+                    b.ToTable("ElcRoleClaimsTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", b =>
@@ -163,7 +165,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserClaims");
+                    b.ToTable("ElcUserClaimsTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserLogin", b =>
@@ -189,7 +191,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserLogins");
+                    b.ToTable("ElcUserLoginsTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserRole", b =>
@@ -204,7 +206,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("ElcUserRoles");
+                    b.ToTable("ElcUserRolesTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserToken", b =>
@@ -228,7 +230,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserTokens");
+                    b.ToTable("ElcUserTokensTest");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRoleClaim", b =>

@@ -17,6 +17,7 @@ using ASP.NET_Core.Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using ASP.NET_Core.Infrastructure.Data.Repositories;
 using ASP.NET_Core.ApplicationCore.AutoMapper;
+using ASP.NET_Core.ApplicationCore.Services;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -92,8 +93,10 @@ namespace ASP.NET_Core.MvcWebApp
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
+            services.AddScoped<IFaqService, FaqService>();
             services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddControllersWithViews();
+            services.AddControllers();
             services.AddHttpContextAccessor();
             services.AddRazorPages().AddRazorRuntimeCompilation();
 
@@ -150,6 +153,9 @@ namespace ASP.NET_Core.MvcWebApp
                 endpoints.MapControllerRoute(
                     name: "register_account",
                     pattern: "{controller=Account}/{action=RegisterAccount}");
+                endpoints.MapControllerRoute(
+                    name: "faq_detail",
+                    pattern: "{controller=Faq}/{action=GetFaqDetail}/{id}");
             });
         }
     }

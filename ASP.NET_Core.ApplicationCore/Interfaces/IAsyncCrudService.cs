@@ -1,20 +1,19 @@
 using ASP.NET_Core.ApplicationCore.Dtos;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace ASP.NET_Core.ApplicationCore.Interfaces
 {
-    public interface IAsyncCrudService<TEntity, TEntityDto, TPrimaryKey, TCrudEntityDto>
+    public interface IAsyncCrudService<TEntity, TEntityDto, TPrimaryKey, TCreateUpdateInput>
         where TEntity : class
-        where TEntityDto : IEntityDto<TPrimaryKey>
-        where TCrudEntityDto : IEntityDto<TPrimaryKey>
+        where TEntityDto : class
+        where TCreateUpdateInput : class
     {
-        Task<TEntityDto> GetAsync(TCrudEntityDto input);
+        Task<TEntityDto> GetAsync(TPrimaryKey id);
 
-        Task<TEntityDto> CreateAsync(TCrudEntityDto input);
+        Task<TEntityDto> CreateAsync(TCreateUpdateInput input);
 
-        Task<TEntityDto> UpdateAsync(TCrudEntityDto input);
+        Task<TEntityDto> UpdateAsync(TCreateUpdateInput input, TPrimaryKey id);
 
-        Task DeleteAsync(TCrudEntityDto input);
+        Task DeleteAsync(TPrimaryKey id);
     }
 }
