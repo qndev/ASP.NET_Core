@@ -2,9 +2,10 @@ using System;
 
 namespace ASP.NET_Core.ApplicationCore.Dtos.Faq
 {
-    public class FaqDto
+    public class FaqDto : EntityDto
     {
-        public int Id { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
         public int CreatedBy { get; set; }
         public int ModifiedBy { get; set; }
         public DateTime CreationTime { get; set; }

@@ -10,7 +10,6 @@ namespace ASP.NET_Core.ApplicationCore.AutoMapper
         public DomainToDtoProfile()
         {
             CreateMap<CreateUpdateFaqDto, Faq>();
-            CreateMap<Faq, EntityDto<int>>();
             CreateMap<Faq, FaqDto>();
         }
     }

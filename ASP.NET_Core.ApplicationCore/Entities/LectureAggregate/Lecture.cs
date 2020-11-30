@@ -4,7 +4,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.LectureAggregate
 {
-    public class Lecture : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Lecture : Entity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string Name { get; set; }
         public string Description { get; set; }
