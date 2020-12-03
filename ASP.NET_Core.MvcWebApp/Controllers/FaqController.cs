@@ -34,5 +34,20 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             }
             return Ok(faqDetail);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Faq>> CreateFaq([FromBody] Faq faq)
+        {
+            if (faq == null)
+            {
+                return NoContent();
+            }
+            var createdResult = await _faqService.CreateAsync(faq);
+            if (createdResult.Item2)
+            {
+                return Ok(faq);
+            }
+            return BadRequest();
+        }
     }
 }

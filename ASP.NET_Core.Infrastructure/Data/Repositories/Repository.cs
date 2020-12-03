@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -30,24 +31,36 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task<T> InsertAsync(T entity)
+        public virtual async Task<(T, bool)> InsertAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
-
-            return entity;
+            return (entity, await CommitSaveChangesAsync());
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<(T, bool)> UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return (entity, await CommitSaveChangesAsync());
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task<bool> DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            return await CommitSaveChangesAsync();
+        }
+
+        public async Task<bool> CommitSaveChangesAsync()
+        {
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Something went wrong." + ex.Message);
+                return false;
+            }
         }
     }
 }

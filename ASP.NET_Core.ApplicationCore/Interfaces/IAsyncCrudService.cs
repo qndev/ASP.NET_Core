@@ -8,7 +8,7 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
     {
         Task<TEntity> GetAsync(TPrimaryKey id);
 
-        Task<TEntity> CreateAsync(TEntity input);
+        Task<(TEntity, bool)> CreateAsync(TEntity input);
 
         Task UpdateAsync(TEntity input, TPrimaryKey id);
 

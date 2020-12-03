@@ -20,7 +20,7 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return entity;
         }
 
-        public virtual async Task<TEntity> CreateAsync(TEntity input)
+        public virtual async Task<(TEntity, bool)> CreateAsync(TEntity input)
         {
             return await _repository.InsertAsync(input);
         }

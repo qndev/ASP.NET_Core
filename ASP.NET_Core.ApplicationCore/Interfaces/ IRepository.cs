@@ -7,8 +7,8 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
     {
         Task<T> GetByIdAsync(TPrimaryKey id);
         Task<IReadOnlyList<T>> ListAllAsync();
-        Task<T> InsertAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<(T, bool)> InsertAsync(T entity);
+        Task<(T, bool)> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
     }
 }
