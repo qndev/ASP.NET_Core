@@ -3,7 +3,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
-    public class News : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class News : BaseEntity<int>, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string Title { get; set; }
         public string Content { get; set; }

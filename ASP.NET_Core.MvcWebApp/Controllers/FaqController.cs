@@ -9,7 +9,8 @@ using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
-    public class FaqController : BaseApiController
+    [Route("[controller]/[action]")]
+    public class FaqController : BaseController
     {
         private readonly IFaqService _faqService;
         private readonly ILogger _logger;
@@ -21,15 +22,14 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             _faqService = faqService;
             _logger = logger;
         }
-        [HttpGet]
         [AllowAnonymous]
-        [Route("[controller]/[action]/{id}")]
-        public async Task<ActionResult<FaqDto>> GetFaqDetail(int faqId)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Faq>> GetFaqDetails(int id)
         {
-            var faqDetail = await _faqService.GetAsync(faqId);
+            var faqDetail = await _faqService.GetAsync(id);
             if (faqDetail == null)
             {
-                _logger.LogInformation("test");
+                _logger.LogInformation("Not found");
                 return NotFound();
             }
             return Ok(faqDetail);

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 

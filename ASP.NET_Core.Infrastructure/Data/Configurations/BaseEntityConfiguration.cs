@@ -4,7 +4,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity<int>, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {

@@ -1,23 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
-using ASP.NET_Core.Infrastructure.Data;
-using ASP.NET_Core.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
-using ASP.NET_Core.ApplicationCore.Interfaces;
-using ASP.NET_Core.Infrastructure.Services;
-using Microsoft.AspNetCore.Http;
-using ASP.NET_Core.Infrastructure.Data.Repositories;
-using ASP.NET_Core.ApplicationCore.AutoMapper;
-using ASP.NET_Core.ApplicationCore.Services;
+using FluentValidation.AspNetCore;
+using ASP.NET_Core.MvcWebApp.Configurations;
 
 namespace ASP.NET_Core.MvcWebApp
 {
@@ -30,80 +17,30 @@ namespace ASP.NET_Core.MvcWebApp
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            // use real database
-            ConfigureProductionServices(services);
-        }
-
-        public void ConfigureProductionServices(IServiceCollection services)
-        {
-            services.AddDbContext<InfrastructureContext>(c =>
-                c.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-            // Identity DbContext
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("IdentityConnection")));
-            ConfigureServices(services);
-        }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-            // Identity settings
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default SignIn settings.
-                options.SignIn.RequireConfirmedEmail = false;
-                options.SignIn.RequireConfirmedPhoneNumber = false;
+            // Infrastructure services.
+            services.AddInfrastructureServices(Configuration);
 
-                // Password settings
-                options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 8;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredUniqueChars = 6;
+            // Cookie settings
+            services.AddCookieSettings();
 
-                // Lockout settings
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-                options.Lockout.MaxFailedAccessAttempts = 10;
-                options.Lockout.AllowedForNewUsers = true;
+            // Application services.
+            services.AddApplicationCoreServices();
 
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-                // If the LoginPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/Login.
-                options.LoginPath = "/Account/Login";
-                // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
-                // the path to /Account/AccessDenied.
-                options.AccessDeniedPath = "/Account/AccessDenied";
-                options.SlidingExpiration = true;
-            });
+            // Web services.
+            services.AddWebServices();
 
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
-            services.AddScoped<IFaqService, FaqService>();
-            services.Configure<MailKitServiceOptions>(Configuration.GetSection(MailKitServiceOptions.MailKitService));
+            //
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddHttpContextAccessor();
             services.AddRazorPages().AddRazorRuntimeCompilation();
-
             // AutoMapper
-            var mapperConfiguration = new AutoMapperConfiguration();
-            services.AddSingleton(mapperConfiguration.CreateMapper());
-            services.AddMvc();
+            // var mapperConfiguration = new AutoMapperConfiguration();
+            // services.AddSingleton(mapperConfiguration.CreateMapper());
+            services.AddMvc().AddFluentValidation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -126,36 +63,10 @@ namespace ASP.NET_Core.MvcWebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //app.UseEndpointRoutingApplication();
             app.UseEndpoints(endpoints =>
             {
-                System.Console.WriteLine("Helllo");
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "list_users",
-                    pattern: "{controller=User}/{action=Index}");
-                endpoints.MapControllerRoute(
-                    name: "user_profile",
-                    pattern: "{controller=Account}/{action=ManagementProfile}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "change_password",
-                    pattern: "{controller=Account}/{action=ChangePassword}/{id?}");
-                endpoints.MapControllerRoute(
-                    name: "account_login",
-                    pattern: "{controller=Account}/{action=Login}");
-                endpoints.MapControllerRoute(
-                    name: "forgot_password",
-                    pattern: "{controller=Account}/{action=ForgotPassword}");
-                endpoints.MapControllerRoute(
-                    name: "reset_password",
-                    pattern: "{controller=Account}/{action=ResetPassword}");
-                endpoints.MapControllerRoute(
-                    name: "register_account",
-                    pattern: "{controller=Account}/{action=RegisterAccount}");
-                endpoints.MapControllerRoute(
-                    name: "faq_detail",
-                    pattern: "{controller=Faq}/{action=GetFaqDetail}/{id}");
+                endpoints.MapControllers();
             });
         }
     }

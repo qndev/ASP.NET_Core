@@ -3,34 +3,36 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
+using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
-    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> where T : class
+    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> where T : BaseEntity<int>
     {
         protected readonly InfrastructureContext _dbContext;
+        protected DbSet<T> _dbSet;
         private readonly ILogger _logger;
 
         public Repository(InfrastructureContext dbContext, ILogger<Repository<T, TPrimaryKey>> logger)
         {
             _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
             _logger = logger;
         }
 
         public virtual async Task<T> GetByIdAsync(TPrimaryKey id)
         {
-            _logger.LogInformation("Test Hello");
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public virtual async Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public virtual async Task<T> InsertAsync(T entity)
         {
-            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbSet.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
 
             return entity;
@@ -44,7 +46,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
 
         public virtual async Task DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
+            _dbSet.Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
     }

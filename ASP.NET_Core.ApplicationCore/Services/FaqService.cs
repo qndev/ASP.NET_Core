@@ -5,7 +5,7 @@ using ASP.NET_Core.ApplicationCore.Dtos;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
-    public class FaqService : AsyncCrudService<Faq, FaqDto, int, CreateUpdateFaqDto>, IFaqService
+    public class FaqService : AsyncCrudService<Faq, int>, IFaqService
     {
         public FaqService(IRepository<Faq, int> repository)
             : base(repository)
