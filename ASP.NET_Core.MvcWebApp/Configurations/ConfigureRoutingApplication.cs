@@ -35,7 +35,7 @@ namespace ASP.NET_Core.MvcWebApp.Configurations
                     pattern: "{controller=Account}/{action=RegisterAccount}");
                 endpoints.MapControllerRoute(
                     name: "faq_detail",
-                    pattern: "{controller=Faq}/{action=GetFaqDetails}/{id}");
+                    pattern: "{controller=Faq}/{action=Details}/{id}");
             });
 
             return app;

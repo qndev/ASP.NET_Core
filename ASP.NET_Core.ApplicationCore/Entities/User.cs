@@ -10,6 +10,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public int IdentityUserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
         public DateTime? Birthday { get; set; }
         public string Phone { get; set; }
         public Byte Gender { get; set; }

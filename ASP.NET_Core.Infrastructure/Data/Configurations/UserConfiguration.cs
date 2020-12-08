@@ -30,6 +30,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.Property(u => u.LastName)
                 .HasColumnType("varchar(50)")
                 .IsRequired();
+            builder.Property(u => u.Email)
+                .HasColumnType("varchar(256)")
+                .IsRequired(false);
             builder.Property(u => u.Phone)
                 .HasColumnType("varchar(25)")
                 .IsRequired(false);

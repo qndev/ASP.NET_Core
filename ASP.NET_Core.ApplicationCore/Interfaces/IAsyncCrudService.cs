@@ -10,8 +10,8 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
 
         Task<(TEntity, bool)> CreateAsync(TEntity input);
 
-        Task UpdateAsync(TEntity input, TPrimaryKey id);
+        Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id);
 
-        Task DeleteAsync(TPrimaryKey id);
+        Task<bool> DeleteAsync(TPrimaryKey id);
     }
 }

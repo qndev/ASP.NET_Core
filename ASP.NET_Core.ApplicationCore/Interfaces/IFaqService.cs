@@ -1,10 +1,11 @@
 using ASP.NET_Core.ApplicationCore.Entities;
-using ASP.NET_Core.ApplicationCore.Dtos.Faq;
-using ASP.NET_Core.ApplicationCore.Dtos;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ASP.NET_Core.ApplicationCore.Interfaces
 {
     public interface IFaqService : IAsyncCrudService<Faq, int>
     {
+        Task<IReadOnlyList<Faq>> GetAllAsyn();
     }
 }

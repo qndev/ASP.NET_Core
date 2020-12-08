@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
+using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
-    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> where T : BaseEntity<int>
+    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> 
+        where T : BaseEntity<TPrimaryKey>
+        where TPrimaryKey : IEquatable<TPrimaryKey>
     {
         protected readonly InfrastructureContext _dbContext;
         protected DbSet<T> _dbSet;
@@ -24,6 +27,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
         public virtual async Task<T> GetByIdAsync(TPrimaryKey id)
         {
             return await _dbSet.FindAsync(id);
+        }
+
+        public virtual async Task<T> FirstOrDefaultAsync(TPrimaryKey id)
+        {
+            return await _dbSet.FirstOrDefaultAsync(entity => entity.Id.Equals(id));
         }
 
         public virtual async Task<IReadOnlyList<T>> ListAllAsync()

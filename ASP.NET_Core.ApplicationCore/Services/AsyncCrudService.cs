@@ -6,7 +6,7 @@ namespace ASP.NET_Core.ApplicationCore.Services
     public abstract class AsyncCrudService<TEntity, TPrimaryKey> : IAsyncCrudService<TEntity, TPrimaryKey>
         where TEntity : class
     {
-        private readonly IRepository<TEntity, TPrimaryKey> _repository;
+        protected readonly IRepository<TEntity, TPrimaryKey> _repository;
 
         public AsyncCrudService(
             IRepository<TEntity, TPrimaryKey> repository
@@ -25,16 +25,24 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return await _repository.InsertAsync(input);
         }
 
-        public virtual async Task UpdateAsync(TEntity input, TPrimaryKey id)
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id)
         {
             var entity = await GetEntityByIdAsync(id);
-            await _repository.UpdateAsync(input);
+            if (entity == null)
+            {
+                return (entity, false);
+            }
+            return (await _repository.UpdateAsync(input));
         }
 
-        public virtual async Task DeleteAsync(TPrimaryKey id)
+        public virtual async Task<bool> DeleteAsync(TPrimaryKey id)
         {
             var entity = await GetEntityByIdAsync(id);
-            await _repository.DeleteAsync(entity);
+            if (entity != null)
+            {
+                return await _repository.DeleteAsync(entity);
+            }
+            return false;
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)

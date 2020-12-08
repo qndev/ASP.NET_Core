@@ -33,14 +33,14 @@ namespace ASP.NET_Core.MvcWebApp
             services.AddWebServices();
 
             //
-            services.AddControllersWithViews();
-            services.AddControllers();
             services.AddHttpContextAccessor();
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            // services.AddRazorPages().AddRazorRuntimeCompilation();
             // AutoMapper
             // var mapperConfiguration = new AutoMapperConfiguration();
             // services.AddSingleton(mapperConfiguration.CreateMapper());
-            services.AddMvc().AddFluentValidation();
+            services.AddMvc()
+                .AddFluentValidation()
+                .AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -63,11 +63,11 @@ namespace ASP.NET_Core.MvcWebApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseEndpointRoutingApplication();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpointRoutingApplication();
+            // app.UseEndpoints(endpoints =>
+            // {
+            //     endpoints.MapControllers();
+            // });
         }
     }
 }
