@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.MvcWebApp.Models.FaqViewModels
 {
@@ -15,5 +16,14 @@ namespace ASP.NET_Core.MvcWebApp.Models.FaqViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Question *")]
         public string Question { get; set; }
+
+        public static Faq MapFaqViewModelToEntity(FaqViewModel faqViewModel)
+        {
+            return new Faq
+            {
+                Answer = faqViewModel.Answer,
+                Question = faqViewModel.Question
+            };
+        }
     }
 }

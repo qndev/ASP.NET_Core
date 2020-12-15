@@ -16,18 +16,21 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
     {
         private readonly IFaqService _faqService;
         private readonly ICurrentUserService _currentUserService;
-        private readonly IMappingEntitiesAndViewModels _viewModelService;
+        private readonly IMappingEntitiesAndViewModels<FaqViewModel, Faq> _createFaqFromViewwModel;
+        private readonly IMappingEntitiesAndViewModels<Faq, FaqViewModel> _createFaqViewModelFromFaq;
         private readonly ILogger _logger;
         public FaqController(
             IFaqService faqService,
             ICurrentUserService currentUserService,
-            IMappingEntitiesAndViewModels viewModelService,
+            IMappingEntitiesAndViewModels<FaqViewModel, Faq> createFaqFromViewwModel,
+            IMappingEntitiesAndViewModels<Faq, FaqViewModel> createFaqViewModelFromFaq,
             ILogger<FaqController> logger
         )
         {
             _faqService = faqService;
             _currentUserService = currentUserService;
-            _viewModelService = viewModelService;
+            _createFaqFromViewwModel = createFaqFromViewwModel;
+            _createFaqViewModelFromFaq = createFaqViewModelFromFaq;
             _logger = logger;
         }
 
@@ -67,18 +70,12 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             }
             if (ModelState.IsValid)
             {
-                Faq faq = new Faq
-                {
-                    Question = faqViewModel.Question,
-                    Answer = faqViewModel.Answer,
-                    CreatedBy = _currentUserService.UserId,
-                    ModifiedBy = _currentUserService.UserId,
-                    CreationTime = DateTime.Now
-                };
+                // var faq = FaqViewModel.MapFaqViewModelToEntity(faqViewModel);
+                var faq = _createFaqFromViewwModel.CreateMapping(faqViewModel);
                 var createdResult = await _faqService.CreateAsync(faq);
                 if (createdResult.Item2)
                 {
-                    return Ok(faq);
+                    return Ok("Successfully created Faq!");
                 }
                 return BadRequest("Something went wrong when create Faq.");
             }
@@ -93,11 +90,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return NotFound();
             }
-            FaqViewModel faqViewModel = new FaqViewModel
-            {
-                Answer = faqDetail.Answer,
-                Question = faqDetail.Question
-            };
+            var faqViewModel = _createFaqViewModelFromFaq.CreateMapping(faqDetail);
             return View(faqViewModel);
         }
 

@@ -46,6 +46,7 @@ namespace ASP.NET_Core.MvcWebApp.Configurations
             services.AddTransient<IEmailSender, EmailSender>();
             services.Configure<MailKitServiceOptions>(configuration.GetSection(MailKitServiceOptions.MailKitService));
             services.AddScoped<IIdentityService, IdentityService>();
+            services.AddTransient<IDateTime, DateTimeService>();
 
             return services;
         }
