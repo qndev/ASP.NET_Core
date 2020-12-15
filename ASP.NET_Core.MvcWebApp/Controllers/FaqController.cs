@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using ASP.NET_Core.ApplicationCore.Entities;
 using ASP.NET_Core.MvcWebApp.Models.FaqViewModels;
+using ASP.NET_Core.MvcWebApp.Interfaces;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -15,22 +16,25 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
     {
         private readonly IFaqService _faqService;
         private readonly ICurrentUserService _currentUserService;
+        private readonly IMappingEntitiesAndViewModels _viewModelService;
         private readonly ILogger _logger;
         public FaqController(
             IFaqService faqService,
             ICurrentUserService currentUserService,
+            IMappingEntitiesAndViewModels viewModelService,
             ILogger<FaqController> logger
         )
         {
             _faqService = faqService;
             _currentUserService = currentUserService;
+            _viewModelService = viewModelService;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _faqService.GetAllAsyn());
+            return View(await _faqService.GetAllAsync());
         }
 
         [HttpGet("{id}")]

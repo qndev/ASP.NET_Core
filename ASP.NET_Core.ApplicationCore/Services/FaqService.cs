@@ -11,9 +11,5 @@ namespace ASP.NET_Core.ApplicationCore.Services
             : base(repository)
         {
         }
-        public async Task<IReadOnlyList<Faq>> GetAllAsyn()
-        {
-            return await _repository.ListAllAsync();
-        }
     }
 }

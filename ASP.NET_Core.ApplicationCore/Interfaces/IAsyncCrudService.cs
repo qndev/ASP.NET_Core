@@ -1,4 +1,4 @@
-using ASP.NET_Core.ApplicationCore.Dtos;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ASP.NET_Core.ApplicationCore.Interfaces
@@ -7,6 +7,8 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
         where TEntity : class
     {
         Task<TEntity> GetAsync(TPrimaryKey id);
+
+        Task<IReadOnlyList<TEntity>> GetAllAsync();
 
         Task<(TEntity, bool)> CreateAsync(TEntity input);
 

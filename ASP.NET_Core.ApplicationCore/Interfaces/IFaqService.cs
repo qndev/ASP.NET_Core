@@ -6,6 +6,5 @@ namespace ASP.NET_Core.ApplicationCore.Interfaces
 {
     public interface IFaqService : IAsyncCrudService<Faq, int>
     {
-        Task<IReadOnlyList<Faq>> GetAllAsyn();
     }
 }

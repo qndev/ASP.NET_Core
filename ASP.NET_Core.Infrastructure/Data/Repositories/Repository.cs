@@ -6,6 +6,8 @@ using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
 using ASP.NET_Core.ApplicationCore.Entities;
+using System.Linq;
+using System.Collections;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
@@ -26,15 +28,22 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
 
         public virtual async Task<T> GetByIdAsync(TPrimaryKey id)
         {
+            // IEnumerable<Faq> allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IQueryable<Faq> enumerablePeople = allPeople;
+            // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IEnumerable<Faq> activePeople = allPeople.Where(p => p.Id == 1);
             return await _dbSet.FindAsync(id);
         }
 
         public virtual async Task<T> FirstOrDefaultAsync(TPrimaryKey id)
         {
+            // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IEnumerable<Faq> enumerablePeople = allPeople;
+            // var activePeople = enumerablePeople.Where(p => p.Id == 1);
             return await _dbSet.FirstOrDefaultAsync(entity => entity.Id.Equals(id));
         }
 
-        public virtual async Task<IReadOnlyList<T>> ListAllAsync()
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }

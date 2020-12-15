@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
+using System.Collections.Generic;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
@@ -18,6 +19,11 @@ namespace ASP.NET_Core.ApplicationCore.Services
         {
             var entity = await GetEntityByIdAsync(id);
             return entity;
+        }
+
+        public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync()
+        {
+            return await _repository.GetAllAsync();
         }
 
         public virtual async Task<(TEntity, bool)> CreateAsync(TEntity input)
