@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
-using ASP.NET_Core.ApplicationCore.Entities;
-using System.Linq;
-using System.Collections;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {

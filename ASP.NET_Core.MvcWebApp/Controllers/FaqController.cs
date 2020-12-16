@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using ASP.NET_Core.ApplicationCore.Entities;
 using ASP.NET_Core.MvcWebApp.Models.FaqViewModels;
 using ASP.NET_Core.MvcWebApp.Interfaces;
+using ASP.NET_Core.MvcWebApp.Models;
+using ASP.NET_Core.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using ASP.NET_Core.ApplicationCore.Constants;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -14,20 +18,26 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
     [Route("[controller]/[action]")]
     public class FaqController : BaseController
     {
+        private readonly InfrastructureContext _dbContext;
         private readonly IFaqService _faqService;
+        private readonly IRepository<Faq, int> _repository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IMappingEntitiesAndViewModels<FaqViewModel, Faq> _createFaqFromViewwModel;
         private readonly IMappingEntitiesAndViewModels<Faq, FaqViewModel> _createFaqViewModelFromFaq;
         private readonly ILogger _logger;
         public FaqController(
+            InfrastructureContext dbContext,
             IFaqService faqService,
+            IRepository<Faq, int> repository,
             ICurrentUserService currentUserService,
             IMappingEntitiesAndViewModels<FaqViewModel, Faq> createFaqFromViewwModel,
             IMappingEntitiesAndViewModels<Faq, FaqViewModel> createFaqViewModelFromFaq,
             ILogger<FaqController> logger
         )
         {
+            _dbContext = dbContext;
             _faqService = faqService;
+            _repository = repository;
             _currentUserService = currentUserService;
             _createFaqFromViewwModel = createFaqFromViewwModel;
             _createFaqViewModelFromFaq = createFaqViewModelFromFaq;
@@ -35,9 +45,9 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View(await _faqService.GetAllAsync());
+            return View(await PaginatedList<Faq>.GetPaginatedListAsync(_dbContext.Faqs.AsNoTracking(), pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX, Constants.Pagging.PAGE_SIZE));
         }
 
         [HttpGet("{id}")]

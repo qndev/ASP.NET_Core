@@ -1,4 +1,4 @@
-@model IEnumerable<Faq>
+@model PaginatedList<Faq>
 @{
     ViewData["Title"] = "Faqs";
     Layout = "_Layout";
@@ -33,7 +33,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Items)
                         {
                             <tr>
                                 <td>

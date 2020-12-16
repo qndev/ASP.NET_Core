@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ASP.NET_Core.Infrastructure\ASP.NET_Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\ASP.NET_Core.ApplicationCore\ASP.NET_Core.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>
