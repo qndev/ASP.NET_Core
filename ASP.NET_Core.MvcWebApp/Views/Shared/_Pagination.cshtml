@@ -3,7 +3,7 @@
         var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     }
-    <li class="page-item @prevDisabled"><a asp-action="Index" class="page-link">First</a></li>
+    <li class="page-item @prevDisabled"><a asp-action="@Model.AspAction" class="page-link">First</a></li>
     <li class="page-item @prevDisabled"><a asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" class="page-link">&laquo; Prev</a></li>
     @for (int i = 1; i <= Model.TotalPages; i++)
     {

@@ -4,7 +4,7 @@ namespace ASP.NET_Core.ApplicationCore.Constants
         public static class Pagging
         {
             public const int DEFAULT_PAGE_INDEX = 1;
-            public const int PAGE_SIZE = 20;
+            public const int PAGE_SIZE = 1;
         }
     }
 }

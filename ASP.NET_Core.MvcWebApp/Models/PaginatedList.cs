@@ -13,6 +13,8 @@ namespace ASP.NET_Core.MvcWebApp.Models
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
         public int TotalCount { get; private set; }
+        public string AspAction { get; set; }
+        public string AspController { get; set; }
 
         public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {

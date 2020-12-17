@@ -67,6 +67,9 @@
                 </table>
             </div>
             <div class="card-footer clearfix">
+                @{
+                    Model.AspAction = "Index";
+                }
                 @await Html.PartialAsync("../Shared/_Pagination.cshtml")
             </div>
         </div>
