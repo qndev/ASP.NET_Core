@@ -69,8 +69,10 @@
             <div class="card-footer clearfix">
                 @{
                     Model.AspAction = "Index";
+                    // var PaginationData = Model;
                 }
-                @await Html.PartialAsync("../Shared/_Pagination.cshtml")
+                @* @await Html.PartialAsync("../Shared/_Pagination.cshtml") *@
+                @await Component.InvokeAsync("Pagination", Model)
             </div>
         </div>
     </div>
