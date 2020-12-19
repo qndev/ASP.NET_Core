@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20201113144717_ChangeUserTableNameTest")]
-    partial class ChangeUserTableNameTest
+    [Migration("20201219104603_ChangePrimaryKeyTypeModel")]
+    partial class ChangePrimaryKeyTypeModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,9 +21,8 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRole", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -46,7 +45,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsUnique()
                         .HasName("RoleNameIndex");
 
-                    b.ToTable("ElcRolesTest");
+                    b.ToTable("ElcRoles");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRoleClaim", b =>
@@ -61,11 +60,12 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("RoleId1")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleId1")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -73,14 +73,14 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("RoleId1");
 
-                    b.ToTable("ElcRoleClaimsTest");
+                    b.ToTable("ElcRoleClaims");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -138,7 +138,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("ElcUsers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserClaim", b =>
@@ -153,11 +153,12 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId1")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
@@ -165,7 +166,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserClaimsTest");
+                    b.ToTable("ElcUserClaims");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserLogin", b =>
@@ -179,11 +180,12 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId1")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
@@ -191,28 +193,28 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserLoginsTest");
+                    b.ToTable("ElcUserLogins");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserRole", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("ElcUserRolesTest");
+                    b.ToTable("ElcUserRoles");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserToken", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
@@ -220,8 +222,8 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId1")
+                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<string>("Value")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -230,7 +232,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("ElcUserTokensTest");
+                    b.ToTable("ElcUserTokens");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRoleClaim", b =>

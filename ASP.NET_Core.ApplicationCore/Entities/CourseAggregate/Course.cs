@@ -4,9 +4,10 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
 {
-    public class Course : BaseEntity<int>, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Course : IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
-        public int SubjectId { get; set; }
+        public string CourseId { get; set; }
+        public string SubjectId { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -16,9 +17,8 @@ namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
         public decimal Price { get; set; }
         public string ImageFile { get; set; }
         public Byte Status { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime CreationTime { get; set; }
+        public string UserId { get; set; }
+        public DateTime? CreationTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public Subject Subject { get; set; }

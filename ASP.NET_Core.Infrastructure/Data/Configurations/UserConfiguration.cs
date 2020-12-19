@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Users");
+            builder.HasKey(u => u.UserId);
+            builder.Property(u => u.UserId)
+                .HasColumnType("varchar(256)");
             builder.HasMany(u => u.Faqs)
                 .WithOne(f => f.User);
             builder.HasMany(u => u.News)
@@ -22,8 +25,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .WithOne(cu => cu.User);
             builder.HasMany(u => u.AnswerUsers)
                 .WithOne(au => au.User);
-            builder.Property(u => u.IdentityUserId)
-                .IsRequired();
             builder.Property(u => u.FirstName)
                 .HasColumnType("varchar(50)")
                 .IsRequired();
@@ -39,7 +40,10 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
             builder.Property(u => u.Gender)
                 .HasDefaultValue(0);
             builder.Property(u => u.ImageUrl)
-                .HasColumnType("varchar(25)")
+                .HasColumnType("varchar(256)")
+                .IsRequired(false);
+            builder.Property(u => u.ModifiedBy)
+                .HasColumnType("varchar(256)")
                 .IsRequired(false);
         }
     }

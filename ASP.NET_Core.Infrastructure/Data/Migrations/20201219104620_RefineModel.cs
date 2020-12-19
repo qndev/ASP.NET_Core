@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASP.NET_Core.Infrastructure.Data.Migrations
 {
-    public partial class InitialModel : Migration
+    public partial class RefineModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,353 +11,334 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Lectures",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    LectureId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Type = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
-                    DoccumentUrl = table.Column<string>(type: "varchar(255)", nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    DoccumentUrl = table.Column<string>(type: "varchar(256)", nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    ModifiedBy = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lectures", x => x.Id);
+                    table.PrimaryKey("PK_Lectures", x => x.LectureId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(type: "varchar(256)", nullable: false),
                     FirstName = table.Column<string>(type: "varchar(50)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Email = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Password = table.Column<string>(type: "varchar(255)", nullable: false),
-                    Type = table.Column<byte>(nullable: false),
+                    Email = table.Column<string>(type: "varchar(256)", nullable: true),
                     Birthday = table.Column<DateTime>(nullable: true),
                     Phone = table.Column<string>(type: "varchar(25)", nullable: true),
                     Gender = table.Column<byte>(nullable: false, defaultValue: (byte)0),
-                    ImageUrl = table.Column<string>(type: "varchar(25)", nullable: true),
-                    Status = table.Column<bool>(nullable: false),
-                    EmailVerifiedAt = table.Column<DateTime>(type: "timestamp", nullable: true),
-                    RememberToken = table.Column<string>(type: "varchar(25)", nullable: true),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    ImageUrl = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Exercises",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    LectureId = table.Column<int>(nullable: false),
+                    ExerciseId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    LectureId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     OrderNumber = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exercises", x => x.Id);
+                    table.PrimaryKey("PK_Exercises", x => x.ExerciseId);
                     table.ForeignKey(
                         name: "FK_Exercises_Lectures_LectureId",
                         column: x => x.LectureId,
                         principalTable: "Lectures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "LectureId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ParentId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    CourseId = table.Column<int>(nullable: false),
-                    LectureId = table.Column<int>(nullable: false),
+                    CommentId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    ParentId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    CourseId = table.Column<string>(nullable: false),
+                    LectureId = table.Column<string>(nullable: false),
                     CommentContent = table.Column<string>(type: "text", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_Comments", x => x.CommentId);
                     table.ForeignKey(
                         name: "FK_Comments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Faqs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    FaqId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Question = table.Column<string>(type: "text", nullable: false),
                     Answer = table.Column<string>(type: "text", nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    UserId = table.Column<string>(nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faqs", x => x.Id);
+                    table.PrimaryKey("PK_Faqs", x => x.FaqId);
                     table.ForeignKey(
-                        name: "FK_Faqs_Users_CreatedBy",
-                        column: x => x.CreatedBy,
+                        name: "FK_Faqs_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "News",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NewsId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    UserId = table.Column<string>(nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_News", x => x.Id);
+                    table.PrimaryKey("PK_News", x => x.NewsId);
                     table.ForeignKey(
-                        name: "FK_News_Users_CreatedBy",
-                        column: x => x.CreatedBy,
+                        name: "FK_News_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Subjects",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(255)", nullable: false),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    SubjectId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(256)", nullable: false),
+                    UserId = table.Column<string>(nullable: true),
+                    ModifiedBy = table.Column<string>(type: "varchar(256)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.Id);
+                    table.PrimaryKey("PK_Subjects", x => x.SubjectId);
                     table.ForeignKey(
-                        name: "FK_Subjects_Users_CreatedBy",
-                        column: x => x.CreatedBy,
+                        name: "FK_Subjects_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ExerciseId = table.Column<int>(nullable: false),
+                    QuestionId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    ExerciseId = table.Column<string>(nullable: true),
                     Content = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     OrderNumber = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.QuestionId);
                     table.ForeignKey(
                         name: "FK_Questions_Exercises_ExerciseId",
                         column: x => x.ExerciseId,
                         principalTable: "Exercises",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ExerciseId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Courses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SubjectId = table.Column<int>(nullable: false),
+                    CourseId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    SubjectId = table.Column<string>(nullable: true),
                     Code = table.Column<string>(type: "varchar(50)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(256)", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     StartDate = table.Column<DateTime>(type: "date", nullable: false),
                     EndDate = table.Column<DateTime>(type: "date", nullable: false),
                     Resources = table.Column<string>(type: "text", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(10, 2)", nullable: false, defaultValue: 0m),
-                    ImageFile = table.Column<string>(type: "varchar(255)", nullable: true),
+                    ImageFile = table.Column<string>(type: "varchar(256)", nullable: true),
                     Status = table.Column<byte>(nullable: false, defaultValue: (byte)0),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    ModifiedBy = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    UserId = table.Column<string>(nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
+                    table.PrimaryKey("PK_Courses", x => x.CourseId);
                     table.ForeignKey(
                         name: "FK_Courses_Subjects_SubjectId",
                         column: x => x.SubjectId,
                         principalTable: "Subjects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SubjectId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Answers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    QuestionId = table.Column<int>(nullable: false),
+                    AnswerId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    QuestionId = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: false),
                     CorrectFlag = table.Column<bool>(nullable: false),
                     OrderNumber = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Answers", x => x.Id);
+                    table.PrimaryKey("PK_Answers", x => x.AnswerId);
                     table.ForeignKey(
                         name: "FK_Answers_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "QuestionId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CourseLecture",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<int>(nullable: false),
-                    LectureId = table.Column<int>(nullable: false),
+                    CourseLectureId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    CourseId = table.Column<string>(nullable: true),
+                    LectureId = table.Column<string>(nullable: true),
                     OrderNumber = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseLecture", x => x.Id);
+                    table.PrimaryKey("PK_CourseLecture", x => x.CourseLectureId);
                     table.ForeignKey(
                         name: "FK_CourseLecture_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CourseLecture_Lectures_LectureId",
                         column: x => x.LectureId,
                         principalTable: "Lectures",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "LectureId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CourseUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CourseId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
+                    CourseUserId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    CourseId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
                     OrderStatus = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
                     OrderType = table.Column<byte>(nullable: false),
                     OrderDateTime = table.Column<DateTime>(type: "timestamp", nullable: false),
                     PaymentDateTime = table.Column<DateTime>(type: "timestamp", nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseUser", x => x.Id);
+                    table.PrimaryKey("PK_CourseUser", x => x.CourseUserId);
                     table.ForeignKey(
                         name: "FK_CourseUser_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_CourseUser_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AnswerUser",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    AnswerId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    CourseId = table.Column<int>(nullable: false),
-                    LectureId = table.Column<int>(nullable: false),
-                    QuestionId = table.Column<int>(nullable: false),
-                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
+                    AnswerUserId = table.Column<string>(type: "varchar(256)", nullable: false),
+                    AnswerId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true),
+                    CourseId = table.Column<string>(nullable: false),
+                    LectureId = table.Column<string>(nullable: false),
+                    QuestionId = table.Column<string>(nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     DeletionTime = table.Column<DateTime>(type: "timestamp", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "timestamp", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnswerUser", x => x.Id);
+                    table.PrimaryKey("PK_AnswerUser", x => x.AnswerUserId);
                     table.ForeignKey(
                         name: "FK_AnswerUser_Answers_AnswerId",
                         column: x => x.AnswerId,
                         principalTable: "Answers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AnswerId",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_AnswerUser_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -412,14 +392,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 column: "LectureId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Faqs_CreatedBy",
+                name: "IX_Faqs_UserId",
                 table: "Faqs",
-                column: "CreatedBy");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_News_CreatedBy",
+                name: "IX_News_UserId",
                 table: "News",
-                column: "CreatedBy");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_ExerciseId",
@@ -427,9 +407,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 column: "ExerciseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subjects_CreatedBy",
+                name: "IX_Subjects_UserId",
                 table: "Subjects",
-                column: "CreatedBy");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

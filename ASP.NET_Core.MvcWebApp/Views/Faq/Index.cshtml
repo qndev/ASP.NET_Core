@@ -37,7 +37,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Id)
+                                    @Html.DisplayFor(modelItem => item.FaqId)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.User.LastName)
@@ -51,10 +51,10 @@
                                 <td>@Html.DisplayFor(modelItem => item.Answer)</td>
                                 <td class="user-management">
                                     <div class="center-operations">
-                                        <a asp-action="Details" asp-route-id="@item.Id"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
-                                        <a asp-action="Edit" asp-route-id="@item.Id"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id"><i id="delete-model" class="fa fa-trash" aria-hidden="true"></i></a>
-                                        <form asp-action="Delete" asp-route-id="@item.Id">
+                                        <a asp-action="Details" asp-route-id="@item.FaqId"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.FaqId"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.FaqId"><i id="delete-model" class="fa fa-trash" aria-hidden="true"></i></a>
+                                        <form asp-action="Delete" asp-route-id="@item.FaqId">
                                             <div class="form-actions no-color">
                                                 <input type="submit" value="Delete" />
                                             </div>

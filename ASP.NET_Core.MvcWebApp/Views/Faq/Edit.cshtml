@@ -11,7 +11,7 @@
     <form asp-controller="Faq" asp-action="Update" asp-route-returnurl="@ViewData["ReturnUrl"]">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="card-body">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="FaqId" />
             <span asp-validation-for="Question" class="text-danger"></span>
             <div class="form-group">
                 <label for="inputQuestion">

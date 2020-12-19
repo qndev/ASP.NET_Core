@@ -15,7 +15,6 @@ using ASP.NET_Core.ApplicationCore.Constants;
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
     [Authorize]
-    [Route("[controller]/[action]")]
     public class FaqController : BaseController
     {
         private readonly InfrastructureContext _dbContext;
@@ -25,6 +24,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         private readonly IMappingEntitiesAndViewModels<FaqViewModel, Faq> _createFaqFromViewwModel;
         private readonly IMappingEntitiesAndViewModels<Faq, FaqViewModel> _createFaqViewModelFromFaq;
         private readonly ILogger _logger;
+        private const string NameOfPrimaryKey= "FaqId";
         public FaqController(
             InfrastructureContext dbContext,
             IFaqService faqService,
@@ -50,10 +50,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             return View(await PaginatedList<Faq>.GetPaginatedListAsync(_dbContext.Faqs.AsNoTracking(), pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX, Constants.Pagging.PAGE_SIZE));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Faq>> Details(int id)
+        [HttpGet]
+        public async Task<ActionResult<Faq>> Details(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id);
+            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
             if (faqDetail == null)
             {
                 _logger.LogInformation("Not found");
@@ -93,9 +93,9 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id);
+            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
             if (faqDetail == null)
             {
                 return NotFound();
@@ -106,27 +106,35 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Faq>> Update(int id, [FromForm] FaqViewModel faqViewModel)
+        public async Task<ActionResult<Faq>> Update(string id, [FromForm] FaqViewModel faqViewModel)
         {
+            _logger.LogInformation(id.ToString());
+            if (id != faqViewModel.FaqId)
+            {
+                return NotFound();
+            }
             Faq faq = new Faq
             {
+                FaqId = faqViewModel.FaqId,
                 Question = faqViewModel.Question,
-                Answer = faqViewModel.Answer
+                Answer = faqViewModel.Answer,
+                // ModifiedBy = _currentUserService.UserId,
+                UserId = _currentUserService.UserId
             };
-            var updatedResult = await _faqService.UpdateAsync(faq, id);
+            var updatedResult = await _faqService.UpdateAsync(faq, id, NameOfPrimaryKey);
             if (updatedResult.Item2)
             {
-                return Ok(faq);
+                return Ok(updatedResult.Item1);
             }
             return BadRequest();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             _logger.LogInformation(id.ToString());
-            if (await _faqService.DeleteAsync(id))
+            if (await _faqService.DeleteAsync(id, NameOfPrimaryKey))
             {
                 return RedirectToAction("Index");
             }

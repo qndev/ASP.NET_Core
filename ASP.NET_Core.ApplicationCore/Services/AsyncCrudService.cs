@@ -15,9 +15,9 @@ namespace ASP.NET_Core.ApplicationCore.Services
         {
             _repository = repository;
         }
-        public virtual async Task<TEntity> GetAsync(TPrimaryKey id)
+        public virtual async Task<TEntity> GetAsync(TPrimaryKey id, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
             return entity;
         }
 
@@ -31,9 +31,9 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return await _repository.InsertAsync(input);
         }
 
-        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id)
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
             if (entity == null)
             {
                 return (entity, false);
@@ -41,9 +41,9 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return (await _repository.UpdateAsync(input));
         }
 
-        public virtual async Task<bool> DeleteAsync(TPrimaryKey id)
+        public virtual async Task<bool> DeleteAsync(TPrimaryKey id, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
             if (entity != null)
             {
                 return await _repository.DeleteAsync(entity);
@@ -51,9 +51,9 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return false;
         }
 
-        protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, string nameOfPrimaryKey)
         {
-            return _repository.GetByIdAsync(id);
+            return _repository.GetByIdAsync(id, nameOfPrimaryKey);
         }
     }
 }

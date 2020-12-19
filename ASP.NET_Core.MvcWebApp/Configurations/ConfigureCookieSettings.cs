@@ -13,7 +13,7 @@ namespace ASP.NET_Core.MvcWebApp.Configurations
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                // options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
                 // If the LoginPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/Login.
                 options.LoginPath = "/Account/Login";

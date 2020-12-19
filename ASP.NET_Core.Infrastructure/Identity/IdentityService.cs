@@ -78,7 +78,7 @@ namespace ASP.NET_Core.Infrastructure.Identity
         {
             var user = await _userManager.FindByEmailAsync(email);
             string responseMessage = "";
-            int userId = user.Id;
+            string userId = user.Id;
             if (user == null)
             {
                 responseMessage = ResponseMessage.USER_NOT_FOUND;
@@ -88,10 +88,10 @@ namespace ASP.NET_Core.Infrastructure.Identity
             {
                 responseMessage = ResponseMessage.EMAIL_NOT_CONFIRMED;
                 _logger.LogInformation("User has not been verified!");
-                return (responseMessage, userId);
+                return (responseMessage, ResponseMessage.SUCCESS_STATUS);
             }
             responseMessage = await _userManager.GeneratePasswordResetTokenAsync(user);
-            return (responseMessage, userId);
+            return (responseMessage, ResponseMessage.ERROR_STATUS);
         }
 
         public async Task<string> ResetPasswordAsync(string email, string token, string newPassword)
@@ -116,7 +116,7 @@ namespace ASP.NET_Core.Infrastructure.Identity
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 _logger.LogInformation("User created a new account with password.");
-                return (ResponseMessage.SUCCESS_MESSAGE, user.Id);
+                return (ResponseMessage.SUCCESS_MESSAGE, ResponseMessage.SUCCESS_STATUS);
             }
             return (ResponseMessage.ERROR_MESSAGE, ResponseMessage.ERROR_STATUS);
         }

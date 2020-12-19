@@ -5,9 +5,9 @@ using ASP.NET_Core.ApplicationCore.Entities.CourseAggregate;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
-    public class User : BaseEntity<int>, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class User : IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
-        public int IdentityUserId { get; set; }
+        public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -15,9 +15,9 @@ namespace ASP.NET_Core.ApplicationCore.Entities
         public string Phone { get; set; }
         public Byte Gender { get; set; }
         public string ImageUrl { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime CreationTime { get; set; }
+        public string CreatedBy { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
         public  ICollection<Comment> Comments { get; set; }

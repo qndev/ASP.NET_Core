@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Comments");
+            builder.HasKey(c => c.CommentId);
+            builder.Property(c => c.CommentId)
+                .HasColumnType("varchar(256)");
             builder.HasOne(c => c.User)
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.UserId);

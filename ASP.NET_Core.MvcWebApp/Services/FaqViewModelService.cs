@@ -2,11 +2,6 @@ using ASP.NET_Core.MvcWebApp.Models.FaqViewModels;
 using ASP.NET_Core.ApplicationCore.Entities;
 using ASP.NET_Core.MvcWebApp.Interfaces;
 using ASP.NET_Core.ApplicationCore.Interfaces;
-using ASP.NET_Core.MvcWebApp.Models;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using ASP.NET_Core.ApplicationCore.Extensions;
 
 namespace ASP.NET_Core.MvcWebApp.Services
 {
@@ -28,6 +23,7 @@ namespace ASP.NET_Core.MvcWebApp.Services
         {
             return new FaqViewModel
             {
+                FaqId = faq.FaqId,
                 Answer = faq.Answer,
                 Question = faq.Question
             };
@@ -39,7 +35,7 @@ namespace ASP.NET_Core.MvcWebApp.Services
             {
                 Question = faqViewModel.Question,
                 Answer = faqViewModel.Answer,
-                CreatedBy = _currentUserService.UserId,
+                UserId = _currentUserService.UserId,
                 ModifiedBy = _currentUserService.UserId,
                 CreationTime = _dateTime.Now
             };

@@ -5,7 +5,7 @@ namespace ASP.NET_Core.MvcWebApp.Models.FaqViewModels
 {
     public class FaqViewModel
     {
-        public int Id { get; set; }
+        public string FaqId { get; set; }
 
         [Required(ErrorMessage = "Answer is required.")]
         [DataType(DataType.Text)]

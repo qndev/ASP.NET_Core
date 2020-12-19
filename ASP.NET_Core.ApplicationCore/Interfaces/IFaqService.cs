@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ASP.NET_Core.ApplicationCore.Interfaces
 {
-    public interface IFaqService : IAsyncCrudService<Faq, int>
+    public interface IFaqService : IAsyncCrudService<Faq, string>
     {
     }
 }

@@ -9,7 +9,7 @@ namespace ASP.NET_Core.ApplicationCore.Validators
         {
             RuleFor(faq => faq.Answer).NotEmpty().WithMessage("The answer field is required");
             RuleFor(faq => faq.Question).NotEmpty().WithMessage("The question field is required");
-            RuleFor(faq => faq.CreatedBy).NotEmpty();
+            RuleFor(faq => faq.UserId).NotEmpty();
             RuleFor(faq => faq.ModifiedBy).NotEmpty();
             RuleFor(faq => faq.CreationTime).NotEmpty();
         }

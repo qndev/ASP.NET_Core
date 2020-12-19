@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
-    public class FaqService : AsyncCrudService<Faq, int>, IFaqService
+    public class FaqService : AsyncCrudService<Faq, string>, IFaqService
     {
-        public FaqService(IRepository<Faq, int> repository)
+        public FaqService(IRepository<Faq, string> repository)
             : base(repository)
         {
         }
