@@ -1,9 +1,10 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASP.NET_Core.Infrastructure.Data.Migrations
 {
-    public partial class RefineModel : Migration
+    public partial class RefineInitialModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,6 +12,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Lectures",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     LectureId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
@@ -24,13 +27,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Lectures", x => x.LectureId);
+                    table.PrimaryKey("PK_Lectures", x => new { x.Id, x.LectureId });
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(type: "varchar(256)", nullable: false),
                     FirstName = table.Column<string>(type: "varchar(50)", nullable: false),
                     LastName = table.Column<string>(type: "varchar(50)", nullable: false),
@@ -47,13 +52,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => new { x.Id, x.UserId });
                 });
 
             migrationBuilder.CreateTable(
                 name: "Exercises",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     ExerciseId = table.Column<string>(type: "varchar(256)", nullable: false),
                     LectureId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(type: "text", nullable: false),
@@ -65,12 +72,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Exercises", x => x.ExerciseId);
+                    table.PrimaryKey("PK_Exercises", x => new { x.Id, x.ExerciseId });
                     table.ForeignKey(
-                        name: "FK_Exercises_Lectures_LectureId",
-                        column: x => x.LectureId,
+                        name: "FK_Exercises_Lectures_Id_LectureId",
+                        columns: x => new { x.Id, x.LectureId },
                         principalTable: "Lectures",
-                        principalColumn: "LectureId",
+                        principalColumns: new[] { "Id", "LectureId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -78,6 +85,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Comments",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CommentId = table.Column<string>(type: "varchar(256)", nullable: false),
                     ParentId = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
@@ -90,12 +99,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.CommentId);
+                    table.PrimaryKey("PK_Comments", x => new { x.Id, x.CommentId });
                     table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Comments_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -103,6 +112,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Faqs",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FaqId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Question = table.Column<string>(type: "text", nullable: false),
                     Answer = table.Column<string>(type: "text", nullable: false),
@@ -114,12 +125,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Faqs", x => x.FaqId);
+                    table.PrimaryKey("PK_Faqs", x => new { x.Id, x.FaqId });
                     table.ForeignKey(
-                        name: "FK_Faqs_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Faqs_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -127,6 +138,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "News",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     NewsId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
                     Content = table.Column<string>(type: "text", nullable: false),
@@ -138,12 +151,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_News", x => x.NewsId);
+                    table.PrimaryKey("PK_News", x => new { x.Id, x.NewsId });
                     table.ForeignKey(
-                        name: "FK_News_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_News_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -151,6 +164,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Subjects",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     SubjectId = table.Column<string>(type: "varchar(256)", nullable: false),
                     Name = table.Column<string>(type: "varchar(256)", nullable: false),
                     UserId = table.Column<string>(nullable: true),
@@ -161,12 +176,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Subjects", x => x.SubjectId);
+                    table.PrimaryKey("PK_Subjects", x => new { x.Id, x.SubjectId });
                     table.ForeignKey(
-                        name: "FK_Subjects_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Subjects_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -174,6 +189,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Questions",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     QuestionId = table.Column<string>(type: "varchar(256)", nullable: false),
                     ExerciseId = table.Column<string>(nullable: true),
                     Content = table.Column<string>(type: "text", nullable: false),
@@ -185,12 +202,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.QuestionId);
+                    table.PrimaryKey("PK_Questions", x => new { x.Id, x.QuestionId });
                     table.ForeignKey(
-                        name: "FK_Questions_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
+                        name: "FK_Questions_Exercises_Id_ExerciseId",
+                        columns: x => new { x.Id, x.ExerciseId },
                         principalTable: "Exercises",
-                        principalColumn: "ExerciseId",
+                        principalColumns: new[] { "Id", "ExerciseId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -198,6 +215,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Courses",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CourseId = table.Column<string>(type: "varchar(256)", nullable: false),
                     SubjectId = table.Column<string>(nullable: true),
                     Code = table.Column<string>(type: "varchar(50)", nullable: false),
@@ -216,12 +235,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Courses", x => x.CourseId);
+                    table.PrimaryKey("PK_Courses", x => new { x.Id, x.CourseId });
                     table.ForeignKey(
-                        name: "FK_Courses_Subjects_SubjectId",
-                        column: x => x.SubjectId,
+                        name: "FK_Courses_Subjects_Id_SubjectId",
+                        columns: x => new { x.Id, x.SubjectId },
                         principalTable: "Subjects",
-                        principalColumn: "SubjectId",
+                        principalColumns: new[] { "Id", "SubjectId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -229,6 +248,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "Answers",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AnswerId = table.Column<string>(type: "varchar(256)", nullable: false),
                     QuestionId = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: false),
@@ -240,12 +261,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Answers", x => x.AnswerId);
+                    table.PrimaryKey("PK_Answers", x => new { x.Id, x.AnswerId });
                     table.ForeignKey(
-                        name: "FK_Answers_Questions_QuestionId",
-                        column: x => x.QuestionId,
+                        name: "FK_Answers_Questions_Id_QuestionId",
+                        columns: x => new { x.Id, x.QuestionId },
                         principalTable: "Questions",
-                        principalColumn: "QuestionId",
+                        principalColumns: new[] { "Id", "QuestionId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -253,6 +274,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "CourseLecture",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CourseLectureId = table.Column<string>(type: "varchar(256)", nullable: false),
                     CourseId = table.Column<string>(nullable: true),
                     LectureId = table.Column<string>(nullable: true),
@@ -263,18 +286,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseLecture", x => x.CourseLectureId);
+                    table.PrimaryKey("PK_CourseLecture", x => new { x.Id, x.CourseLectureId });
                     table.ForeignKey(
-                        name: "FK_CourseLecture_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_CourseLecture_Courses_Id_CourseId",
+                        columns: x => new { x.Id, x.CourseId },
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumns: new[] { "Id", "CourseId" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CourseLecture_Lectures_LectureId",
-                        column: x => x.LectureId,
+                        name: "FK_CourseLecture_Lectures_Id_LectureId",
+                        columns: x => new { x.Id, x.LectureId },
                         principalTable: "Lectures",
-                        principalColumn: "LectureId",
+                        principalColumns: new[] { "Id", "LectureId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -282,6 +305,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "CourseUser",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CourseUserId = table.Column<string>(type: "varchar(256)", nullable: false),
                     CourseId = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
@@ -295,18 +320,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CourseUser", x => x.CourseUserId);
+                    table.PrimaryKey("PK_CourseUser", x => new { x.Id, x.CourseUserId });
                     table.ForeignKey(
-                        name: "FK_CourseUser_Courses_CourseId",
-                        column: x => x.CourseId,
+                        name: "FK_CourseUser_Courses_Id_CourseId",
+                        columns: x => new { x.Id, x.CourseId },
                         principalTable: "Courses",
-                        principalColumn: "CourseId",
+                        principalColumns: new[] { "Id", "CourseId" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_CourseUser_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_CourseUser_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -314,6 +339,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 name: "AnswerUser",
                 columns: table => new
                 {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     AnswerUserId = table.Column<string>(type: "varchar(256)", nullable: false),
                     AnswerId = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: true),
@@ -326,90 +353,90 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AnswerUser", x => x.AnswerUserId);
+                    table.PrimaryKey("PK_AnswerUser", x => new { x.Id, x.AnswerUserId });
                     table.ForeignKey(
-                        name: "FK_AnswerUser_Answers_AnswerId",
-                        column: x => x.AnswerId,
+                        name: "FK_AnswerUser_Answers_Id_AnswerId",
+                        columns: x => new { x.Id, x.AnswerId },
                         principalTable: "Answers",
-                        principalColumn: "AnswerId",
+                        principalColumns: new[] { "Id", "AnswerId" },
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_AnswerUser_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AnswerUser_Users_Id_UserId",
+                        columns: x => new { x.Id, x.UserId },
                         principalTable: "Users",
-                        principalColumn: "UserId",
+                        principalColumns: new[] { "Id", "UserId" },
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Answers_QuestionId",
+                name: "IX_Answers_Id_QuestionId",
                 table: "Answers",
-                column: "QuestionId");
+                columns: new[] { "Id", "QuestionId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnswerUser_AnswerId",
+                name: "IX_AnswerUser_Id_AnswerId",
                 table: "AnswerUser",
-                column: "AnswerId");
+                columns: new[] { "Id", "AnswerId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AnswerUser_UserId",
+                name: "IX_AnswerUser_Id_UserId",
                 table: "AnswerUser",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
+                name: "IX_Comments_Id_UserId",
                 table: "Comments",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseLecture_CourseId",
+                name: "IX_CourseLecture_Id_CourseId",
                 table: "CourseLecture",
-                column: "CourseId");
+                columns: new[] { "Id", "CourseId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseLecture_LectureId",
+                name: "IX_CourseLecture_Id_LectureId",
                 table: "CourseLecture",
-                column: "LectureId");
+                columns: new[] { "Id", "LectureId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_SubjectId",
+                name: "IX_Courses_Id_SubjectId",
                 table: "Courses",
-                column: "SubjectId");
+                columns: new[] { "Id", "SubjectId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseUser_CourseId",
+                name: "IX_CourseUser_Id_CourseId",
                 table: "CourseUser",
-                column: "CourseId");
+                columns: new[] { "Id", "CourseId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseUser_UserId",
+                name: "IX_CourseUser_Id_UserId",
                 table: "CourseUser",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Exercises_LectureId",
+                name: "IX_Exercises_Id_LectureId",
                 table: "Exercises",
-                column: "LectureId");
+                columns: new[] { "Id", "LectureId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Faqs_UserId",
+                name: "IX_Faqs_Id_UserId",
                 table: "Faqs",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_News_UserId",
+                name: "IX_News_Id_UserId",
                 table: "News",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_ExerciseId",
+                name: "IX_Questions_Id_ExerciseId",
                 table: "Questions",
-                column: "ExerciseId");
+                columns: new[] { "Id", "ExerciseId" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subjects_UserId",
+                name: "IX_Subjects_Id_UserId",
                 table: "Subjects",
-                column: "UserId");
+                columns: new[] { "Id", "UserId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

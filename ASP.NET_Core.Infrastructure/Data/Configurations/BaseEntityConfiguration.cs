@@ -4,15 +4,15 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.Infrastructure.Data.Configurations
 {
-    public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : class , IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class BaseEntityConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : BaseEntity<int> , IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public virtual void Configure(EntityTypeBuilder<TEntity> builder)
         {
-            builder.Property(a => a.CreationTime)
+            builder.Property(b => b.CreationTime)
                 .HasColumnType("timestamp");
-            builder.Property(a => a.DeletionTime)
+            builder.Property(b => b.DeletionTime)
                 .HasColumnType("timestamp");
-            builder.Property(a => a.LastModificationTime)
+            builder.Property(b => b.LastModificationTime)
                 .HasColumnType("timestamp");
         }
     }

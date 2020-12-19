@@ -3,7 +3,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
-    public class Comment : IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Comment : BaseEntity<int>, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string CommentId { get; set; }
         public string ParentId { get; set; }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20201219104603_ChangePrimaryKeyTypeModel")]
-    partial class ChangePrimaryKeyTypeModel
+    [Migration("20201219145721_RefineInitialIdentityModel")]
+    partial class RefineInitialIdentityModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Name")
                         .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
@@ -64,14 +64,9 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("RoleId1")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("RoleId1");
 
                     b.ToTable("ElcRoleClaims");
                 });
@@ -79,7 +74,6 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
                     b.Property<int>("AccessFailedCount")
@@ -157,14 +151,9 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("ElcUserClaims");
                 });
@@ -184,14 +173,9 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.HasKey("LoginProvider", "ProviderKey");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("ElcUserLogins");
                 });
@@ -222,56 +206,39 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("varchar(255) CHARACTER SET utf8mb4");
-
                     b.Property<string>("Value")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("ElcUserTokens");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRoleClaim", b =>
                 {
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationRole", null)
-                        .WithMany()
+                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationRole", "Role")
+                        .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationRole", "Role")
-                        .WithMany("RoleClaims")
-                        .HasForeignKey("RoleId1");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserClaim", b =>
                 {
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserLogin", b =>
                 {
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
                         .WithMany("Logins")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserRole", b =>
@@ -291,15 +258,11 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUserToken", b =>
                 {
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId1");
                 });
 #pragma warning restore 612, 618
         }

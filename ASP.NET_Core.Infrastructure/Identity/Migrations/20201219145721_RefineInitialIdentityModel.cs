@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
-    public partial class ChangePrimaryKeyTypeModel : Migration
+    public partial class RefineInitialIdentityModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     Name = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(type: "varchar(255)", nullable: true)
+                    Description = table.Column<string>(type: "varchar(256)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,8 +56,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    RoleId1 = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,12 +67,6 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         principalTable: "ElcRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ElcRoleClaims_ElcRoles_RoleId1",
-                        column: x => x.RoleId1,
-                        principalTable: "ElcRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -84,8 +77,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    UserId1 = table.Column<string>(nullable: true)
+                    ClaimValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,12 +88,6 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         principalTable: "ElcUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ElcUserClaims_ElcUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "ElcUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,8 +97,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     LoginProvider = table.Column<string>(nullable: false),
                     ProviderKey = table.Column<string>(nullable: false),
                     ProviderDisplayName = table.Column<string>(nullable: true),
-                    UserId = table.Column<string>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,12 +108,6 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         principalTable: "ElcUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ElcUserLogins_ElcUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "ElcUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,8 +141,7 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                     UserId = table.Column<string>(nullable: false),
                     LoginProvider = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true),
-                    UserId1 = table.Column<string>(nullable: true)
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,23 +152,12 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                         principalTable: "ElcUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ElcUserTokens_ElcUsers_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "ElcUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ElcRoleClaims_RoleId",
                 table: "ElcRoleClaims",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ElcRoleClaims_RoleId1",
-                table: "ElcRoleClaims",
-                column: "RoleId1");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -204,19 +171,9 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ElcUserClaims_UserId1",
-                table: "ElcUserClaims",
-                column: "UserId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ElcUserLogins_UserId",
                 table: "ElcUserLogins",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ElcUserLogins_UserId1",
-                table: "ElcUserLogins",
-                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ElcUserRoles_RoleId",
@@ -233,11 +190,6 @@ namespace ASP.NET_Core.Infrastructure.Identity.Migrations
                 table: "ElcUsers",
                 column: "NormalizedUserName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ElcUserTokens_UserId1",
-                table: "ElcUserTokens",
-                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

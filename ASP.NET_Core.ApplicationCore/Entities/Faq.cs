@@ -3,7 +3,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities
 {
-    public class Faq : IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Faq : BaseEntity<int>, IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string FaqId { get; set; }
         public string Question { get; set; }
