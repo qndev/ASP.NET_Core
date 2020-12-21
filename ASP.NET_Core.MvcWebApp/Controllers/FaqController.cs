@@ -106,10 +106,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Faq>> Update(string id, [FromForm] FaqViewModel faqViewModel)
+        public async Task<ActionResult<Faq>> Update(string faqId, [FromForm] FaqViewModel faqViewModel)
         {
-            _logger.LogInformation(id.ToString());
-            if (id != faqViewModel.FaqId)
+            _logger.LogInformation(faqId);
+            if (faqId != faqViewModel.FaqId)
             {
                 return NotFound();
             }
@@ -121,7 +121,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 // ModifiedBy = _currentUserService.UserId,
                 UserId = _currentUserService.UserId
             };
-            var updatedResult = await _faqService.UpdateAsync(faq, id, NameOfPrimaryKey);
+            var updatedResult = await _faqService.UpdateAsync(faq, faqId, NameOfPrimaryKey);
             if (updatedResult.Item2)
             {
                 return Ok(updatedResult.Item1);
@@ -131,10 +131,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string faqId)
         {
-            _logger.LogInformation(id.ToString());
-            if (await _faqService.DeleteAsync(id, NameOfPrimaryKey))
+            _logger.LogInformation(faqId);
+            if (await _faqService.DeleteAsync(faqId, NameOfPrimaryKey))
             {
                 return RedirectToAction("Index");
             }

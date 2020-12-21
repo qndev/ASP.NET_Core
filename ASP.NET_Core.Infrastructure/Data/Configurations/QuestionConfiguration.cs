@@ -10,16 +10,12 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Questions");
-            builder.HasKey(q => new { q.Id, q.QuestionId });
+            builder.HasKey(q => q.QuestionId);
             builder.Property(q => q.QuestionId)
                 .HasColumnType("varchar(256)");
-            builder.Property(b => b.Id)
-                .ValueGeneratedOnAdd();
-            builder.Property(b => b.Id)
-                .ValueGeneratedOnAdd();
             builder.HasOne(q => q.Exercise)
                 .WithMany(e => e.Questions)
-                .HasForeignKey(q => new { q.Id, q.ExerciseId });
+                .HasForeignKey(q => q.ExerciseId);
             builder.HasMany(q => q.Answers)
                 .WithOne(a => a.Question);
             builder.Property(q => q.Content)

@@ -10,11 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Lectures");
-            builder.HasKey(l => new { l.Id, l.LectureId });
+            builder.HasKey(l => l.LectureId);
             builder.Property(l => l.LectureId)
                 .HasColumnType("varchar(256)");
-            builder.Property(b => b.Id)
-                .ValueGeneratedOnAdd();
             builder.HasMany(l => l.Exercises)
                 .WithOne(e => e.Lecture);
             builder.HasMany(l => l.CourseLectures)

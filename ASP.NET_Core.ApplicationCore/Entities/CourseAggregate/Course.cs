@@ -4,7 +4,7 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
 {
-    public class Course : BaseEntity<int>, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Course : IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
         public string CourseId { get; set; }
         public string SubjectId { get; set; }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
-    public partial class RefineInitialIdentityModel : Migration
+    public partial class InitialIdentityModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

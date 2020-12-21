@@ -10,11 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Users");
-            builder.HasKey(u => new { u.Id, u.UserId });
+            builder.HasKey(u => u.UserId);
             builder.Property(u => u.UserId)
                 .HasColumnType("varchar(256)");
-            builder.Property(b => b.Id)
-                .ValueGeneratedOnAdd();
             builder.HasMany(u => u.Faqs)
                 .WithOne(f => f.User);
             builder.HasMany(u => u.News)

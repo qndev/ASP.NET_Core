@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(InfrastructureContext))]
-    [Migration("20201219145702_RefineInitialModel")]
-    partial class RefineInitialModel
+    [Migration("20201221052057_InitialModel")]
+    partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,10 +21,6 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.AnswerUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("AnswerUserId")
                         .HasColumnType("varchar(256)");
 
@@ -55,21 +51,17 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "AnswerUserId");
+                    b.HasKey("AnswerUserId");
 
-                    b.HasIndex("Id", "AnswerId");
+                    b.HasIndex("AnswerId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AnswerUser");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("CommentId")
                         .HasColumnType("varchar(256)");
 
@@ -100,19 +92,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "CommentId");
+                    b.HasKey("CommentId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("CourseId")
                         .HasColumnType("varchar(256)");
 
@@ -169,19 +157,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasKey("Id", "CourseId");
+                    b.HasKey("CourseId");
 
-                    b.HasIndex("Id", "SubjectId");
+                    b.HasIndex("SubjectId");
 
                     b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("SubjectId")
                         .HasColumnType("varchar(256)");
 
@@ -204,19 +188,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "SubjectId");
+                    b.HasKey("SubjectId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseLecture", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("CourseLectureId")
                         .HasColumnType("varchar(256)");
 
@@ -238,21 +218,17 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "CourseLectureId");
+                    b.HasKey("CourseLectureId");
 
-                    b.HasIndex("Id", "CourseId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("Id", "LectureId");
+                    b.HasIndex("LectureId");
 
                     b.ToTable("CourseLecture");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("CourseUserId")
                         .HasColumnType("varchar(256)");
 
@@ -283,21 +259,17 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "CourseUserId");
+                    b.HasKey("CourseUserId");
 
-                    b.HasIndex("Id", "CourseId");
+                    b.HasIndex("CourseId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("CourseUser");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Faq", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("FaqId")
                         .HasColumnType("varchar(256)");
 
@@ -324,19 +296,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "FaqId");
+                    b.HasKey("FaqId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("AnswerId")
                         .HasColumnType("varchar(256)");
 
@@ -362,19 +330,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("QuestionId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "AnswerId");
+                    b.HasKey("AnswerId");
 
-                    b.HasIndex("Id", "QuestionId");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("ExerciseId")
                         .HasColumnType("varchar(256)");
 
@@ -400,19 +364,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id", "ExerciseId");
+                    b.HasKey("ExerciseId");
 
-                    b.HasIndex("Id", "LectureId");
+                    b.HasIndex("LectureId");
 
                     b.ToTable("Exercises");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("LectureId")
                         .HasColumnType("varchar(256)");
 
@@ -446,17 +406,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.HasKey("Id", "LectureId");
+                    b.HasKey("LectureId");
 
                     b.ToTable("Lectures");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("QuestionId")
                         .HasColumnType("varchar(256)");
 
@@ -483,19 +439,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("Id", "QuestionId");
+                    b.HasKey("QuestionId");
 
-                    b.HasIndex("Id", "ExerciseId");
+                    b.HasIndex("ExerciseId");
 
                     b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.News", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("NewsId")
                         .HasColumnType("varchar(256)");
 
@@ -522,19 +474,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id", "NewsId");
+                    b.HasKey("NewsId");
 
-                    b.HasIndex("Id", "UserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("News");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(256)");
 
@@ -578,7 +526,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<string>("Phone")
                         .HasColumnType("varchar(25)");
 
-                    b.HasKey("Id", "UserId");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });
@@ -587,89 +535,89 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", "Answer")
                         .WithMany("AnswerUsers")
-                        .HasForeignKey("Id", "AnswerId");
+                        .HasForeignKey("AnswerId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("AnswerUsers")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Comment", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", "Subject")
                         .WithMany("Courses")
-                        .HasForeignKey("Id", "SubjectId");
+                        .HasForeignKey("SubjectId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Subjects")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseLecture", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", "Course")
                         .WithMany("CourseLectures")
-                        .HasForeignKey("Id", "CourseId");
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", "Lecture")
                         .WithMany("CourseLectures")
-                        .HasForeignKey("Id", "LectureId");
+                        .HasForeignKey("LectureId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseUser", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", "Course")
                         .WithMany("CourseUsers")
-                        .HasForeignKey("Id", "CourseId");
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("CourseUsers")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Faq", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Faqs")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("Id", "QuestionId");
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", "Lecture")
                         .WithMany("Exercises")
-                        .HasForeignKey("Id", "LectureId");
+                        .HasForeignKey("LectureId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", "Exercise")
                         .WithMany("Questions")
-                        .HasForeignKey("Id", "ExerciseId");
+                        .HasForeignKey("ExerciseId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.News", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("News")
-                        .HasForeignKey("Id", "UserId");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

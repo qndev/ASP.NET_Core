@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 using ASP.NET_Core.ApplicationCore.Entities.Common;
+using System.Linq.Expressions;
+using System.Reflection;
+using ASP.NET_Core.ApplicationCore.Extensions;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
@@ -23,13 +26,16 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             _logger = logger;
         }
 
-        public virtual async Task<T> GetByIdAsync(TPrimaryKey id, string primaryKey)
+        public virtual async Task<T> GetByIdAsync(TPrimaryKey id, string nameOfEntityKey)
         {
             // IEnumerable<Faq> allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
             // IQueryable<Faq> enumerablePeople = allPeople;
             // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
             // IEnumerable<Faq> activePeople = allPeople.Where(p => p.Id == 1);
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(typeOfT => typeOfT.GetType().GetProperty(primaryKey).Name.Equals(id));
+            var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
+
+            _logger.LogInformation(predicate.ToString());
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
             // return await _dbSet.FindAsync(id);
         }
 
@@ -74,7 +80,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             }
             catch (DbUpdateException ex)
             {
-                Console.WriteLine("Something went wrong." + ex.Message);
+                Console.WriteLine("Something went wrong." + ex);
                 return false;
             }
         }

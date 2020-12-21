@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Identity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20201219145721_RefineInitialIdentityModel")]
-    partial class RefineInitialIdentityModel
+    [Migration("20201221153320_InitialIdentityModel")]
+    partial class InitialIdentityModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
