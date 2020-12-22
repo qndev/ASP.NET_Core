@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
-    public class ApplicationUser : IdentityUser<int>
+    public class ApplicationUser : IdentityUser
     {
         public virtual ICollection<ApplicationUserClaim> Claims { get; set; }
         public virtual ICollection<ApplicationUserLogin> Logins { get; set; }
@@ -11,35 +11,35 @@ namespace ASP.NET_Core.Infrastructure.Identity
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
     }
 
-    public class ApplicationRole : IdentityRole<int>
+    public class ApplicationRole : IdentityRole
     {
         public string Description { get; set; }
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
         public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; }
     }
 
-    public class ApplicationUserRole : IdentityUserRole<int>
+    public class ApplicationUserRole : IdentityUserRole<string>
     {
         public virtual ApplicationUser User { get; set; }
         public virtual ApplicationRole Role { get; set; }
     }
 
-    public class ApplicationUserClaim : IdentityUserClaim<int>
+    public class ApplicationUserClaim : IdentityUserClaim<string>
     {
         public virtual ApplicationUser User { get; set; }
     }
 
-    public class ApplicationUserLogin : IdentityUserLogin<int>
+    public class ApplicationUserLogin : IdentityUserLogin<string>
     {
         public virtual ApplicationUser User { get; set; }
     }
 
-    public class ApplicationRoleClaim : IdentityRoleClaim<int>
+    public class ApplicationRoleClaim : IdentityRoleClaim<string>
     {
         public virtual ApplicationRole Role { get; set; }
     }
 
-    public class ApplicationUserToken : IdentityUserToken<int>
+    public class ApplicationUserToken : IdentityUserToken<string>
     {
         public virtual ApplicationUser User { get; set; }
     }

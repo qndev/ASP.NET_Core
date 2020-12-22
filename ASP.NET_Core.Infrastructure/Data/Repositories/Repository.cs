@@ -1,51 +1,88 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
+using ASP.NET_Core.ApplicationCore.Entities.Common;
+using System.Linq.Expressions;
+using System.Reflection;
+using ASP.NET_Core.ApplicationCore.Extensions;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
-    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> where T : class
+    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> 
+        where T : class
+        where TPrimaryKey : IEquatable<TPrimaryKey>
     {
         protected readonly InfrastructureContext _dbContext;
+        protected DbSet<T> _dbSet;
         private readonly ILogger _logger;
 
         public Repository(InfrastructureContext dbContext, ILogger<Repository<T, TPrimaryKey>> logger)
         {
             _dbContext = dbContext;
+            _dbSet = _dbContext.Set<T>();
             _logger = logger;
         }
 
-        public virtual async Task<T> GetByIdAsync(TPrimaryKey id)
+        public virtual async Task<T> GetByIdAsync(TPrimaryKey id, string nameOfEntityKey)
         {
-            _logger.LogInformation("Test Hello");
-            return await _dbContext.Set<T>().FindAsync(id);
+            // IEnumerable<Faq> allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IQueryable<Faq> enumerablePeople = allPeople;
+            // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IEnumerable<Faq> activePeople = allPeople.Where(p => p.Id == 1);
+            var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
+
+            _logger.LogInformation(predicate.ToString());
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+            // return await _dbSet.FindAsync(id);
         }
 
-        public virtual async Task<IReadOnlyList<T>> ListAllAsync()
+        public virtual async Task<T> FirstOrDefaultAsync(TPrimaryKey id, string primaryKey)
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
+            // IEnumerable<Faq> enumerablePeople = allPeople;
+            // var activePeople = enumerablePeople.Where(p => p.Id == 1);
+            return await _dbSet.FirstOrDefaultAsync(typeOfT => typeOfT.GetType().GetProperty(primaryKey).Name.Equals(id));
         }
 
-        public virtual async Task<T> InsertAsync(T entity)
+        public virtual async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
-
-            return entity;
+            return await _dbSet.ToListAsync();
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<(T, bool)> InsertAsync(T entity)
         {
+            await _dbSet.AddAsync(entity);
+            return (entity, await CommitSaveChangesAsync());
+        }
+
+        public virtual async Task<(T, bool)> UpdateAsync(T entity)
+        {
+            // _dbContext.Update(entity);
             _dbContext.Entry(entity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
+            return (entity, await CommitSaveChangesAsync());
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task<bool> DeleteAsync(T entity)
         {
-            _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            _dbSet.Remove(entity);
+            return await CommitSaveChangesAsync();
+        }
+
+        public async Task<bool> CommitSaveChangesAsync()
+        {
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine("Something went wrong." + ex);
+                return false;
+            }
         }
     }
 }

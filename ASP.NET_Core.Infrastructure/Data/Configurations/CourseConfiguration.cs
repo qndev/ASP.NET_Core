@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Courses");
+            builder.HasKey(c => c.CourseId);
+            builder.Property(c => c.CourseId)
+                .HasColumnType("varchar(256)");
             builder.HasOne(c => c.Subject)
                 .WithMany(s => s.Courses)
                 .HasForeignKey(c => c.SubjectId);
@@ -21,7 +24,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasColumnType("varchar(50)")
                 .IsRequired();
             builder.Property(c => c.Name)
-                .HasColumnType("varchar(255)")
+                .HasColumnType("varchar(256)")
                 .IsRequired();
             builder.Property(c => c.Description)
                 .HasColumnType("text")
@@ -39,13 +42,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasColumnType("decimal(10, 2)")
                 .HasDefaultValue(0);
             builder.Property(c => c.ImageFile)
-                .HasColumnType("varchar(255)")
+                .HasColumnType("varchar(256)")
                 .IsRequired(false);
             builder.Property(c => c.Status)
                 .HasDefaultValue(0);
-            builder.Property(c => c.CreatedBy)
-                .IsRequired();
-            builder.Property(c => c.ModifiedBy)
+            builder.Property(c => c.UserId)
                 .IsRequired();
         }
     }

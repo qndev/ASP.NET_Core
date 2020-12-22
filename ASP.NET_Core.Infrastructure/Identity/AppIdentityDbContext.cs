@@ -5,7 +5,7 @@ using ASP.NET_Core.Infrastructure.Identity.IdentityConfigurations;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
-    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
+    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
         ApplicationRoleClaim, ApplicationUserToken>
     {
         private const string UserTable = "ElcUsers";

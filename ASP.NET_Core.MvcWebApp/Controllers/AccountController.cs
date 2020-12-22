@@ -12,30 +12,33 @@ using ASP.NET_Core.ApplicationCore.Constants;
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private  readonly  ICurrentUserService _currentUserService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            IHttpContextAccessor httpContextAccessor,
+            //IHttpContextAccessor httpContextAccessor,
             IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
+            ICurrentUserService currentUserService,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
-            _httpContextAccessor = httpContextAccessor;
+            //_httpContextAccessor = httpContextAccessor;
             _identityService = identityService;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
+            _currentUserService = currentUserService;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -91,9 +94,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-                 _logger.LogInformation(userName);
-                if (model.Email == userName)
+                //var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+                //_logger.LogInformation(userName);
+                var currentUserEmail = _currentUserService.UserEmail;
+                if (model.Email == currentUserEmail)
                 {
                     if (await _identityService.ChangePasswordAsync(model.Email, model.CurrentPassword, model.NewPassword))
                     {

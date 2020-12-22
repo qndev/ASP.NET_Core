@@ -10,15 +10,21 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Faqs");
+            builder.HasKey(f => f.FaqId);
+            builder.Property(f => f.FaqId)
+                .HasColumnType("varchar(256)");
             builder.HasOne(f => f.User)
                 .WithMany(u => u.Faqs)
-                .HasForeignKey(f => f.CreatedBy);
+                .HasForeignKey(f => f.UserId);
             builder.Property(f => f.Answer)
                 .HasColumnType("text")
                 .IsRequired();
             builder.Property(f => f.Question)
                 .HasColumnType("text")
                 .IsRequired();
+            builder.Property(f => f.ModifiedBy)
+                .HasColumnType("varchar(256)")
+                .IsRequired(false);
         }
     }
 }

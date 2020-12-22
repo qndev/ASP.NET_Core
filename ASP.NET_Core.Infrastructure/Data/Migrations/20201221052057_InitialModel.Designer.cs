@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(InfrastructureContext))]
-    [Migration("20201026010630_ChangeUserEntityWithIdentity")]
-    partial class ChangeUserEntityWithIdentity
+    [Migration("20201221052057_InitialModel")]
+    partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,20 +21,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.AnswerUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("AnswerUserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("AnswerId")
-                        .HasColumnType("int");
+                    b.Property<string>("AnswerId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -42,16 +40,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("LectureId")
-                        .HasColumnType("int");
+                    b.Property<string>("LectureId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnswerUserId");
 
                     b.HasIndex("AnswerId");
 
@@ -62,21 +62,19 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Comment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CommentId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("CommentContent")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -84,16 +82,17 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("LectureId")
-                        .HasColumnType("int");
+                    b.Property<string>("LectureId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParentId")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CommentId");
 
                     b.HasIndex("UserId");
 
@@ -102,21 +101,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -130,17 +123,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .HasColumnType("date");
 
                     b.Property<string>("ImageFile")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<decimal>("Price")
                         .ValueGeneratedOnAdd()
@@ -160,10 +150,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .HasColumnType("tinyint unsigned")
                         .HasDefaultValue((byte)0);
 
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("CourseId");
 
                     b.HasIndex("SubjectId");
 
@@ -172,17 +166,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("SubjectId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -190,33 +178,33 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasKey("SubjectId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Subjects");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseLecture", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CourseLectureId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -224,13 +212,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("LectureId")
-                        .HasColumnType("int");
+                    b.Property<string>("LectureId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseLectureId");
 
                     b.HasIndex("CourseId");
 
@@ -241,17 +229,14 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseUser", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("CourseUserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
+                    b.Property<string>("CourseId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -271,10 +256,10 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("PaymentDateTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CourseUserId");
 
                     b.HasIndex("CourseId");
 
@@ -285,21 +270,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Faq", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("FaqId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Answer")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -307,25 +286,27 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Question")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasKey("FaqId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Faqs");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("AnswerId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -334,10 +315,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<bool>("CorrectFlag")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -348,10 +327,10 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<sbyte>("OrderNumber")
                         .HasColumnType("tinyint(4)");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasKey("Id");
+                    b.HasKey("AnswerId");
 
                     b.HasIndex("QuestionId");
 
@@ -360,14 +339,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ExerciseId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -378,8 +354,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("LectureId")
-                        .HasColumnType("int");
+                    b.Property<string>("LectureId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
@@ -388,7 +364,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExerciseId");
 
                     b.HasIndex("LectureId");
 
@@ -397,17 +373,11 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("LectureId")
+                        .HasColumnType("varchar(256)");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -417,13 +387,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
                     b.Property<string>("DoccumentUrl")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -432,25 +402,26 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<sbyte>("Type")
                         .HasColumnType("tinyint(4)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("LectureId");
 
                     b.ToTable("Lectures");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("QuestionId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -459,8 +430,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ExerciseId")
-                        .HasColumnType("int");
+                    b.Property<string>("ExerciseId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
@@ -468,7 +439,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<int>("OrderNumber")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("QuestionId");
 
                     b.HasIndex("ExerciseId");
 
@@ -477,21 +448,15 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.News", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("NewsId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
@@ -499,39 +464,42 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasKey("NewsId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("News");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.User", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("CreatedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<DateTime>("CreationTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp")
-                        .HasDefaultValueSql("now()");
+                    b.Property<DateTime?>("CreationTime")
+                        .HasColumnType("timestamp");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("timestamp");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -542,11 +510,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .HasColumnType("tinyint unsigned")
                         .HasDefaultValue((byte)0);
 
-                    b.Property<int>("IdentityUserId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("varchar(256)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp");
@@ -555,208 +520,104 @@ namespace ASP.NET_Core.Infrastructure.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<int>("ModifiedBy")
-                        .HasColumnType("int");
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("varchar(256)");
 
                     b.Property<string>("Phone")
                         .HasColumnType("varchar(25)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ElcRoles");
-                });
-
-            modelBuilder.Entity("ASP.NET_Core.Infrastructure.Identity.ApplicationUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ElcUsers");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.AnswerUser", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", "Answer")
                         .WithMany("AnswerUsers")
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AnswerId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("AnswerUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Comment", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", "Subject")
                         .WithMany("Courses")
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SubjectId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Subject", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Subjects")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseLecture", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", "Course")
                         .WithMany("CourseLectures")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", "Lecture")
                         .WithMany("CourseLectures")
-                        .HasForeignKey("LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LectureId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.CourseUser", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.CourseAggregate.Course", "Course")
                         .WithMany("CourseUsers")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseId");
 
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("CourseUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.Faq", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("Faqs")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Answer", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", "Question")
                         .WithMany("Answers")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Lecture", "Lecture")
                         .WithMany("Exercises")
-                        .HasForeignKey("LectureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LectureId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Question", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.LectureAggregate.Exercise", "Exercise")
                         .WithMany("Questions")
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExerciseId");
                 });
 
             modelBuilder.Entity("ASP.NET_Core.ApplicationCore.Entities.News", b =>
                 {
                     b.HasOne("ASP.NET_Core.ApplicationCore.Entities.User", "User")
                         .WithMany("News")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

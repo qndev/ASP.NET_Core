@@ -26,20 +26,25 @@ namespace ASP.NET_Core.Infrastructure.Identity.IdentityConfigurations
         public override void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             base.Configure(builder);
-            builder.Property(eu => eu.Id)
-                .ValueGeneratedOnAdd();
+            // Each User can have many UserClaims
             builder.HasMany(e => e.Claims)
-                .WithOne()
+                .WithOne(e => e.User)
                 .HasForeignKey(uc => uc.UserId)
                 .IsRequired();
+
+            // Each User can have many UserLogins
             builder.HasMany(e => e.Logins)
-                .WithOne()
+                .WithOne(e => e.User)
                 .HasForeignKey(ul => ul.UserId)
                 .IsRequired();
+
+            // Each User can have many UserTokens
             builder.HasMany(e => e.Tokens)
-                .WithOne()
+                .WithOne(e => e.User)
                 .HasForeignKey(ut => ut.UserId)
                 .IsRequired();
+
+            // Each User can have many entries in the UserRole join table
             builder.HasMany(e => e.UserRoles)
                 .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
@@ -57,10 +62,17 @@ namespace ASP.NET_Core.Infrastructure.Identity.IdentityConfigurations
         {
             base.Configure(builder);
             builder.Property(r => r.Description)
-                .HasColumnType("varchar(255)");
+                .HasColumnType("varchar(256)");
+            // Each Role can have many entries in the UserRole join table
             builder.HasMany(e => e.UserRoles)
                 .WithOne(e => e.Role)
                 .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+
+            // Each Role can have many associated RoleClaims
+            builder.HasMany(e => e.RoleClaims)
+                .WithOne(e => e.Role)
+                .HasForeignKey(rc => rc.RoleId)
                 .IsRequired();
         }
     }

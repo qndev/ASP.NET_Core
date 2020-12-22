@@ -1,49 +1,59 @@
 using System.Threading.Tasks;
-using ASP.NET_Core.ApplicationCore.Dtos;
 using ASP.NET_Core.ApplicationCore.Interfaces;
+using System.Collections.Generic;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
-    public abstract class AsyncCrudService<TEntity, TEntityDto, TPrimaryKey, TCreateUpdateInput> : CrudServiceBase<TEntity, TEntityDto, TPrimaryKey, TCreateUpdateInput>, IAsyncCrudService<TEntity, TEntityDto, TPrimaryKey, TCreateUpdateInput>
+    public abstract class AsyncCrudService<TEntity, TPrimaryKey> : IAsyncCrudService<TEntity, TPrimaryKey>
         where TEntity : class
-        where TEntityDto : class
-        where TCreateUpdateInput : class
     {
-        protected AsyncCrudService(IRepository<TEntity, TPrimaryKey> repository)
-            :base(repository)
+        protected readonly IRepository<TEntity, TPrimaryKey> _repository;
+
+        public AsyncCrudService(
+            IRepository<TEntity, TPrimaryKey> repository
+        )
         {
+            _repository = repository;
         }
-        public virtual async Task<TEntityDto> GetAsync(TPrimaryKey id)
+        public virtual async Task<TEntity> GetAsync(TPrimaryKey id, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id);
-            //return _mapper.Map<TEntity, TEntityDto>(entity);
-            return MapToEntityDto(entity);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
+            return entity;
         }
 
-        public virtual async Task<TEntityDto> CreateAsync(TCreateUpdateInput input)
+        public virtual async Task<IReadOnlyList<TEntity>> GetAllAsync()
         {
-            var entity = MapToEntity(input);
-            await _repository.InsertAsync(entity);
-            return MapToEntityDto(entity);
+            return await _repository.GetAllAsync();
         }
 
-        public virtual async Task<TEntityDto> UpdateAsync(TCreateUpdateInput input, TPrimaryKey id)
+        public virtual async Task<(TEntity, bool)> CreateAsync(TEntity input)
         {
-            var entity = await GetEntityByIdAsync(id);
-            MapToEntity(input, entity);
-            await _repository.UpdateAsync(entity);
-            return MapToEntityDto(entity);
+            return await _repository.InsertAsync(input);
         }
 
-        public virtual async Task DeleteAsync(TPrimaryKey id)
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id);
-            await _repository.DeleteAsync(entity);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
+            if (entity == null)
+            {
+                return (entity, false);
+            }
+            return (await _repository.UpdateAsync(input));
         }
 
-        protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id)
+        public virtual async Task<bool> DeleteAsync(TPrimaryKey id, string nameOfPrimaryKey)
         {
-             return _repository.GetByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
+            if (entity != null)
+            {
+                return await _repository.DeleteAsync(entity);
+            }
+            return false;
+        }
+
+        protected virtual Task<TEntity> GetEntityByIdAsync(TPrimaryKey id, string nameOfPrimaryKey)
+        {
+            return _repository.GetByIdAsync(id, nameOfPrimaryKey);
         }
     }
 }
