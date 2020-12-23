@@ -17,7 +17,7 @@ namespace ASP.NET_Core.ApplicationCore.Entities
 
         public Faq()
         {
-            FaqId = Guid.NewGuid().ToString();
+            FaqId = "faq-" + Guid.NewGuid().ToString();
         }
     }
 }

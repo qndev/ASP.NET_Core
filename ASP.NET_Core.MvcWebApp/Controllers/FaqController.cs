@@ -24,7 +24,6 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         private readonly IMappingEntitiesAndViewModels<FaqViewModel, Faq> _createFaqFromViewwModel;
         private readonly IMappingEntitiesAndViewModels<Faq, FaqViewModel> _createFaqViewModelFromFaq;
         private readonly ILogger _logger;
-        private const string NameOfPrimaryKey= "FaqId";
         public FaqController(
             InfrastructureContext dbContext,
             IFaqService faqService,
@@ -53,7 +52,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<Faq>> Details(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
+            var faqDetail = await _faqService.GetAsync(id, Constants.EntityKey.FAQ_ID);
             if (faqDetail == null)
             {
                 _logger.LogInformation("Not found");
@@ -95,7 +94,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
+            var faqDetail = await _faqService.GetAsync(id, Constants.EntityKey.FAQ_ID);
             if (faqDetail == null)
             {
                 return NotFound();
@@ -106,22 +105,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Faq>> Update(string faqId, [FromForm] FaqViewModel faqViewModel)
+        public async Task<IActionResult> Update([FromForm] FaqViewModel faqViewModel)
         {
-            _logger.LogInformation(faqId);
-            if (faqId != faqViewModel.FaqId)
-            {
-                return NotFound();
-            }
-            Faq faq = new Faq
-            {
-                FaqId = faqViewModel.FaqId,
-                Question = faqViewModel.Question,
-                Answer = faqViewModel.Answer,
-                // ModifiedBy = _currentUserService.UserId,
-                UserId = _currentUserService.UserId
-            };
-            var updatedResult = await _faqService.UpdateAsync(faq, faqId, NameOfPrimaryKey);
+            Faq faq = FaqViewModel.MapFaqViewModelToEntity(faqViewModel);
+            var updatedResult = await _faqService.UpdateAsync(faq, faqViewModel, Constants.EntityKey.FAQ_ID);
             if (updatedResult.Item2)
             {
                 return Ok(updatedResult.Item1);
@@ -134,7 +121,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         public async Task<IActionResult> Delete(string faqId)
         {
             _logger.LogInformation(faqId);
-            if (await _faqService.DeleteAsync(faqId, NameOfPrimaryKey))
+            if (await _faqService.DeleteAsync(faqId, Constants.EntityKey.FAQ_ID))
             {
                 return RedirectToAction("Index");
             }

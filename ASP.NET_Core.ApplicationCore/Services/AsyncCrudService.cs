@@ -31,14 +31,9 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return await _repository.InsertAsync(input);
         }
 
-        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id, string nameOfPrimaryKey)
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, object modifiedFields, string nameOfPrimaryKey)
         {
-            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
-            if (entity == null)
-            {
-                return (entity, false);
-            }
-            return (await _repository.UpdateAsync(input));
+            return await _repository.UpdateAsync(input, modifiedFields, nameOfPrimaryKey);
         }
 
         public virtual async Task<bool> DeleteAsync(TPrimaryKey id, string nameOfPrimaryKey)

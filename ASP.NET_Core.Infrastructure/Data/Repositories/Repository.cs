@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
-using ASP.NET_Core.ApplicationCore.Entities.Common;
-using System.Linq.Expressions;
 using System.Reflection;
 using ASP.NET_Core.ApplicationCore.Extensions;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
-    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey> 
+    public class Repository<T, TPrimaryKey> : IRepository<T, TPrimaryKey>
         where T : class
         where TPrimaryKey : IEquatable<TPrimaryKey>
     {
@@ -35,7 +33,7 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
 
             _logger.LogInformation(predicate.ToString());
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+            return await _dbSet.FirstOrDefaultAsync(predicate);
             // return await _dbSet.FindAsync(id);
         }
 
@@ -58,10 +56,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             return (entity, await CommitSaveChangesAsync());
         }
 
-        public virtual async Task<(T, bool)> UpdateAsync(T entity)
+        public virtual async Task<(T, bool)> UpdateAsync(T entity, object modifiedFields, string nameOfEntityKey)
         {
+            var faqId = GetEntityKeyValue(entity, nameOfEntityKey);
+            var existingEntity = await GetByIdAsync(faqId, nameOfEntityKey);
+            if (existingEntity == null)
+            {
+                _logger.LogInformation("Notfound Entity.");
+                return (entity, false);
+            }
             // _dbContext.Update(entity);
-            _dbContext.Entry(entity).State = EntityState.Modified;
+            // _dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.Entry(existingEntity).CurrentValues.SetValues(modifiedFields);
             return (entity, await CommitSaveChangesAsync());
         }
 
@@ -84,5 +90,16 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
                 return false;
             }
         }
+
+        #region Helpers
+
+        private TPrimaryKey GetEntityKeyValue(T entity, string nameOfEntityKey)
+        {
+            PropertyInfo propertyInfo = entity.GetType().GetProperty(nameOfEntityKey);
+            var faqIdValue = propertyInfo.GetValue(entity);
+            return (TPrimaryKey)Convert.ChangeType(faqIdValue, typeof(TPrimaryKey));
+        }
+
+        #endregion
     }
 }
