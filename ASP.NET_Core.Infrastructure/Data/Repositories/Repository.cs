@@ -6,6 +6,7 @@ using ASP.NET_Core.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using ASP.NET_Core.ApplicationCore.Extensions;
+using System.Linq.Expressions;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
@@ -33,7 +34,8 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
 
             _logger.LogInformation(predicate.ToString());
-            return await _dbSet.FirstOrDefaultAsync(predicate);
+            // return await _dbSet.FirstOrDefaultAsync(predicate);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
             // return await _dbSet.FindAsync(id);
         }
 
@@ -71,6 +73,46 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             return (entity, await CommitSaveChangesAsync());
         }
 
+        public virtual async Task<(T, bool)> UpdateAsync(T entity, string nameOfEntityKey, params Expression<Func<T, object>>[] properties)
+        {
+            var faqId = GetEntityKeyValue(entity, nameOfEntityKey);
+            var existingEntity = await GetByIdAsync(faqId, nameOfEntityKey);
+            if (existingEntity == null)
+            {
+                _logger.LogInformation("Notfound Entity.");
+                return (entity, false);
+            }
+            _dbContext.Entry(entity).State = EntityState.Unchanged;
+            foreach (var property in properties)
+            {
+                var propertyName = GetPropertyName(property);
+                _dbContext.Entry(entity).Property(propertyName).IsModified = true;
+            }
+            return (entity, await CommitSaveChangesAsync());
+        }
+
+        public virtual async Task<(T, bool)> UpdateAsync(T entity, string nameOfEntityKey)
+        {
+            var faqId = GetEntityKeyValue(entity, nameOfEntityKey);
+            // get entity without tracking: AsNoTracking()
+            var existingEntity = await GetByIdAsync(faqId, nameOfEntityKey);
+            if (existingEntity == null)
+            {
+                _logger.LogInformation("Notfound Entity.");
+                return (entity, false);
+            }
+            PropertyInfo[] entityProperties = entity.GetType().GetProperties();
+            foreach (var entityProperty in entityProperties)
+            {
+                _logger.LogInformation(entityProperty.Name);
+                if ((entityProperty.Name != nameOfEntityKey) && (entityProperty.GetValue(entity) != null))
+                {
+                    _dbContext.Entry(entity).Property(entityProperty.Name).IsModified = true;
+                }
+            }
+            return (entity, await CommitSaveChangesAsync());
+        }
+
         public virtual async Task<bool> DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
@@ -99,6 +141,18 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             var faqIdValue = propertyInfo.GetValue(entity);
             return (TPrimaryKey)Convert.ChangeType(faqIdValue, typeof(TPrimaryKey));
         }
+
+        private string GetPropertyName(Expression<Func<T, object>> propertyExpression)
+        {
+            MemberExpression memberExpression = propertyExpression.Body as MemberExpression;
+            _logger.LogInformation(memberExpression.Member.Name);
+            return memberExpression.Member.Name;
+        }
+
+        // private string GetPropertyOfEntity(T entity)
+        // {
+        //     return "";
+        // }
 
         #endregion
     }

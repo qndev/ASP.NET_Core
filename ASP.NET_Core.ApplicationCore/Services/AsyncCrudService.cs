@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
@@ -34,6 +36,16 @@ namespace ASP.NET_Core.ApplicationCore.Services
         public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, object modifiedFields, string nameOfPrimaryKey)
         {
             return await _repository.UpdateAsync(input, modifiedFields, nameOfPrimaryKey);
+        }
+
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, string nameOfPrimaryKey,  params Expression<Func<TEntity, object>>[] properties)
+        {
+            return await _repository.UpdateAsync(input, nameOfPrimaryKey, properties);
+        }
+
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, string nameOfPrimaryKey)
+        {
+            return await _repository.UpdateAsync(input, nameOfPrimaryKey);
         }
 
         public virtual async Task<bool> DeleteAsync(TPrimaryKey id, string nameOfPrimaryKey)
