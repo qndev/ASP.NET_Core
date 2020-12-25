@@ -107,10 +107,15 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Update([FromForm] FaqViewModel faqViewModel)
         {
+            if (faqViewModel.FaqId == null)
+            {
+                return NotFound("Notfound");
+            }
             Faq faq = FaqViewModel.MapFaqViewModelToEntity(faqViewModel);
             // var updatedResult = await _faqService.UpdateAsync(faq, faqViewModel, Constants.EntityKey.FAQ_ID);
             // var updatedResult = await _faqService.UpdateAsync(faq, Constants.EntityKey.FAQ_ID, faq => faq.Question, faq => faq.Answer);
-            var updatedResult = await _faqService.UpdateAsync(faq, Constants.EntityKey.FAQ_ID);
+            // var updatedResult = await _faqService.UpdateAsync(faq, Constants.EntityKey.FAQ_ID);
+            var updatedResult = await _faqService.UpdateAsync(faq);
             if (updatedResult.Item2)
             {
                 return Ok(updatedResult.Item1);

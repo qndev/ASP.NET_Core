@@ -33,6 +33,11 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return await _repository.InsertAsync(input);
         }
 
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input)
+        {
+            return await _repository.UpdateAsync(input);
+        }
+
         public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, object modifiedFields, string nameOfPrimaryKey)
         {
             return await _repository.UpdateAsync(input, modifiedFields, nameOfPrimaryKey);

@@ -54,7 +54,7 @@
                                         <a asp-action="Details" asp-route-id="@item.FaqId"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
                                         <a asp-action="Edit" asp-route-id="@item.FaqId"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
                                         <a asp-action="Delete" asp-route-id="@item.FaqId"><i id="delete-model" class="fa fa-trash" aria-hidden="true"></i></a>
-                                        <form asp-action="Delete" asp-route-id="@item.FaqId">
+                                        <form asp-action="Delete" asp-route-faqId="@item.FaqId">
                                             <div class="form-actions no-color">
                                                 <input type="submit" value="Delete" />
                                             </div>
