@@ -14,17 +14,17 @@
             <input type="hidden" asp-for="FaqId" />
             <span asp-validation-for="Question" class="text-danger"></span>
             <div class="form-group">
-                <label for="inputQuestion">
+                <label for="inputEditQuestion">
                     @Html.DisplayNameFor(vm => vm.Question)
                 </label>
-                <input asp-for="Question" type="text" class="form-control" id="inputQuestion" placeholder="Question">
+                <input asp-for="Question" type="text" class="form-control" id="inputEditQuestion" placeholder="Question">
             </div>
             <span asp-validation-for="Answer" class="text-danger"></span>
             <div class="form-group">
-                <label for="inputAnswer">
+                <label for="inputEditAnswer">
                     @Html.DisplayNameFor(vm => vm.Answer)
                 </label>
-                <input asp-for="Answer" type="text" class="form-control" id="inputAnswer" placeholder="Answer">
+                <input asp-for="Answer" type="text" class="form-control" id="inputEditAnswer" placeholder="Answer">
             </div>
         </div>
         <div class="card-footer">

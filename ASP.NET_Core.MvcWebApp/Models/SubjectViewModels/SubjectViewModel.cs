@@ -6,8 +6,6 @@ namespace ASP.NET_Core.MvcWebApp.Models.SubjectViewModels
 {
     public class SubjectViewModel
     {
-        private readonly ICurrentUserService _currentUserService;
-
         public string SubjectId { get; set; }
         public string UserId { get; set; }
 
@@ -15,5 +13,13 @@ namespace ASP.NET_Core.MvcWebApp.Models.SubjectViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Subject *")]
         public string Name { get; set; }
+
+        public static Subject MapSubjectViewModelToEntity(SubjectViewModel subjectViewModel)
+        {
+            return new Subject
+            {
+                Name = subjectViewModel.Name
+            };
+        }
     }
 }

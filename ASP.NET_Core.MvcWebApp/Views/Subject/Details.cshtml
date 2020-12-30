@@ -1,0 +1,19 @@
+@model SubjectViewModel
+@{
+    ViewData["Title"] = "Subject Details";
+    Layout = "_Layout";
+}
+
+<div>
+    <h4> Faq Details</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt class="col-sm-2">
+            @Html.DisplayFor(model => model.Name)
+        </dt>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-subjectId="@Model.SubjectId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

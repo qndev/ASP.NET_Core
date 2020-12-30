@@ -11,6 +11,7 @@ using ASP.NET_Core.MvcWebApp.Models;
 using ASP.NET_Core.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core.ApplicationCore.Constants;
+using System.Linq;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -46,7 +47,22 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View(await PaginatedList<Faq>.GetPaginatedListAsync(_dbContext.Faqs.AsNoTracking(), pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX, Constants.Pagging.PAGE_SIZE));
+            return View(await PaginatedList<Faq>.GetPaginatedListAsync(
+                                                    _dbContext.Faqs
+                                                        .Include(u => u.User)
+                                                        .Select(f => new Faq
+                                                        {
+                                                            FaqId = f.FaqId,
+                                                            Question = f.Question,
+                                                            Answer = f.Answer,
+                                                            User = new User
+                                                            {
+                                                                LastName = f.User.LastName,
+                                                                Email = f.User.Email
+                                                            }
+                                                        }).AsNoTracking(),
+                                                    pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX,
+                                                    Constants.Pagging.PAGE_SIZE));
         }
 
         [HttpGet]

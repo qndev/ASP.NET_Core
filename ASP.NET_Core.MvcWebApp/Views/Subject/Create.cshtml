@@ -1,0 +1,30 @@
+@model SubjectViewModel
+@{
+    ViewData["Title"] = "Create Subject";
+    Layout = "_Layout";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Create Subject</h3>
+    </div>
+    <form asp-controller="Subject" asp-action="Create" asp-route-returnurl="@ViewData["ReturnUrl"]">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <span asp-validation-for="Name" class="text-danger"></span>
+            <div class="form-group">
+                <label for="inputSubjectName">
+                    @Html.DisplayNameFor(vm => vm.Name)
+                </label>
+                <input asp-for="Name" type="text" class="form-control" id="inputSubjectName" placeholder="Name">
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
