@@ -56,6 +56,23 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<Faq>> Details(string subjectId)
+        {
+            var subjectDetails = await _subjectService.GetAsync(subjectId, Constants.EntityKey.SUBJECT_ID);
+            if (subjectDetails == null)
+            {
+                _logger.LogInformation("Subject Not found");
+                return NotFound("Subject Not found");
+            }
+            var subjectViewModel = new SubjectViewModel
+            {
+                SubjectId = subjectDetails.SubjectId,
+                Name = subjectDetails.Name
+            };
+            return View(subjectViewModel);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View("Create");
@@ -83,6 +100,55 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 return BadRequest("Something went wrong when create Subject.");
             }
             return BadRequest(ModelState);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string subjectId)
+        {
+            var subjectDetails = await _subjectService.GetAsync(subjectId, Constants.EntityKey.SUBJECT_ID);
+            if (subjectDetails == null)
+            {
+                return NotFound();
+            }
+            var subjectViewModel = new SubjectViewModel
+            {
+                SubjectId = subjectDetails.SubjectId,
+                Name = subjectDetails.Name
+            };
+            return View(subjectViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update([FromForm] SubjectViewModel subjectViewModel)
+        {
+            if (subjectViewModel.SubjectId == null)
+            {
+                return NotFound("Notfound");
+            }
+            Subject subject = new Subject
+            {
+                SubjectId = subjectViewModel.SubjectId,
+                Name = subjectViewModel.Name
+            };
+            var updatedResult = await _subjectService.UpdateAsync(subject);
+            if (updatedResult.Item2)
+            {
+                return View("Details", subjectViewModel);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string subjectId)
+        {
+            _logger.LogInformation(subjectId);
+            if (await _subjectService.DeleteAsync(subjectId, Constants.EntityKey.SUBJECT_ID))
+            {
+                return RedirectToAction("Index");
+            }
+            return View("Error");
         }
     }
 }

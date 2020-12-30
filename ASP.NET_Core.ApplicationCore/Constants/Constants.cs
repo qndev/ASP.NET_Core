@@ -10,6 +10,7 @@ namespace ASP.NET_Core.ApplicationCore.Constants
         public static class EntityKey
         {
             public const string FAQ_ID= "FaqId";
+            public const string SUBJECT_ID= "SubjectId";
         }
     }
 }
