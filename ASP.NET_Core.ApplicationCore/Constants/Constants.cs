@@ -11,6 +11,7 @@ namespace ASP.NET_Core.ApplicationCore.Constants
         {
             public const string FAQ_ID= "FaqId";
             public const string SUBJECT_ID= "SubjectId";
+            public const string NEWS_ID= "NewsId";
         }
     }
 }

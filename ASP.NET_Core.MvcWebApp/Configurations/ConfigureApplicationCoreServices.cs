@@ -16,6 +16,7 @@ namespace ASP.NET_Core.MvcWebApp.Configurations
             services.AddScoped<IFaqService, FaqService>();
             services.AddScoped<ISubjectService, SubjectService>();
             services.AddScoped(typeof(IUserService<,>), typeof(UserService<,>));
+            services.AddScoped(typeof(INewsService<,>), typeof(NewsService<,>));
 
             // Fluent Validation
             services.AddTransient<IValidator<Faq>, FaqValidator>();

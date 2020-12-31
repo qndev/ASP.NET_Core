@@ -1,0 +1,23 @@
+@model NewsViewModel
+@{
+    ViewData["Title"] = "News Details";
+    Layout = "_Layout";
+}
+
+ <div class="row">
+    <div class="col-12">
+        <div class="post-title">
+            <small>@Html.DisplayFor(model => model.CreationTime)</small>
+            <h2>@Html.DisplayFor(model => model.Title)</h2>
+            <p style="font-size: 15px"><em>by</em> @Html.DisplayFor(model => model.User.LastName)</p>
+        </div>
+        <div class="post-content">
+            @Html.DisplayFor(model => model.Content)
+        </div>
+    </div>
+    <div class="col-2"></div>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-subjectId="@Model.NewsId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

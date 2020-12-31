@@ -1,0 +1,38 @@
+@model CreateOrUpdateNewsViewModel
+@{
+    ViewData["Title"] = "Edit News";
+    Layout = "_Layout";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Edit News</h3>
+    </div>
+    <form asp-controller="News" asp-action="Update" asp-route-returnurl="@ViewData["ReturnUrl"]">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <input type="hidden" asp-for="NewsId" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="form-group">
+                <label for="inputEditNewsTitle">
+                    @Html.DisplayNameFor(vm => vm.Title)
+                </label>
+                <input asp-for="Title" type="text" class="form-control" id="inputEditNewsTitle" placeholder="Title">
+            </div>
+            <span asp-validation-for="Content" class="text-danger"></span>
+            <div class="form-group">
+                <label for="inputEditNewsContent">
+                    @Html.DisplayNameFor(vm => vm.Content)
+                </label>
+                <input asp-for="Content" type="text" class="form-control" id="inputEditNewsContent" placeholder="Content">
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
