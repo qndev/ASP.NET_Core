@@ -1,4 +1,4 @@
-@model PaginatedList<Faq>
+@model PaginatedList<Subject>
 @{
     ViewData["Title"] = "Faqs";
     Layout = "_Layout";
@@ -27,9 +27,8 @@
                             <th style="width: 10px">#ID</th>
                             <th>Created By</th>
                             <th>Email</th>
-                            <th>Question</th>
-                            <th>Answer</th>
-                            <th></th>
+                            <th>Title</th>
+                            <th>Operations</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,7 +36,7 @@
                         {
                             <tr>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.FaqId)
+                                    @Html.DisplayFor(modelItem => item.SubjectId)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.User.LastName)
@@ -46,15 +45,13 @@
                                     @Html.DisplayFor(modelItem => item.User.Email)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Question)
+                                    @Html.DisplayFor(modelItem => item.Name)
                                 </td>
-                                <td>@Html.DisplayFor(modelItem => item.Answer)</td>
                                 <td class="user-management">
                                     <div class="center-operations">
-                                        <a asp-action="Details" asp-route-id="@item.FaqId"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
-                                        <a asp-action="Edit" asp-route-id="@item.FaqId"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
-                                        <a asp-action="Delete" asp-route-id="@item.FaqId"><i id="delete-model" class="fa fa-trash" aria-hidden="true"></i></a>
-                                        <form asp-action="Delete" asp-route-faqId="@item.FaqId">
+                                        <a asp-action="Details" asp-route-subjectId="@item.SubjectId"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                        <a asp-action="Edit" asp-route-subjectId="@item.SubjectId"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
+                                        <form asp-action="Delete" asp-route-subjectId="@item.SubjectId">
                                             <div class="form-actions no-color">
                                                 <input type="submit" value="Delete" />
                                             </div>

@@ -11,6 +11,7 @@ using ASP.NET_Core.MvcWebApp.Models;
 using ASP.NET_Core.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using ASP.NET_Core.ApplicationCore.Constants;
+using System.Linq;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
@@ -24,7 +25,6 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         private readonly IMappingEntitiesAndViewModels<FaqViewModel, Faq> _createFaqFromViewwModel;
         private readonly IMappingEntitiesAndViewModels<Faq, FaqViewModel> _createFaqViewModelFromFaq;
         private readonly ILogger _logger;
-        private const string NameOfPrimaryKey= "FaqId";
         public FaqController(
             InfrastructureContext dbContext,
             IFaqService faqService,
@@ -47,13 +47,28 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            return View(await PaginatedList<Faq>.GetPaginatedListAsync(_dbContext.Faqs.AsNoTracking(), pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX, Constants.Pagging.PAGE_SIZE));
+            return View(await PaginatedList<Faq>.GetPaginatedListAsync(
+                                                    _dbContext.Faqs
+                                                        .Include(u => u.User)
+                                                        .Select(f => new Faq
+                                                        {
+                                                            FaqId = f.FaqId,
+                                                            Question = f.Question,
+                                                            Answer = f.Answer,
+                                                            User = new User
+                                                            {
+                                                                LastName = f.User.LastName,
+                                                                Email = f.User.Email
+                                                            }
+                                                        }).AsNoTracking(),
+                                                    pageNumber ?? Constants.Pagging.DEFAULT_PAGE_INDEX,
+                                                    Constants.Pagging.PAGE_SIZE));
         }
 
         [HttpGet]
         public async Task<ActionResult<Faq>> Details(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
+            var faqDetail = await _faqService.GetAsync(id, Constants.EntityKey.FAQ_ID);
             if (faqDetail == null)
             {
                 _logger.LogInformation("Not found");
@@ -95,7 +110,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var faqDetail = await _faqService.GetAsync(id, NameOfPrimaryKey);
+            var faqDetail = await _faqService.GetAsync(id, Constants.EntityKey.FAQ_ID);
             if (faqDetail == null)
             {
                 return NotFound();
@@ -106,22 +121,17 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<Faq>> Update(string faqId, [FromForm] FaqViewModel faqViewModel)
+        public async Task<IActionResult> Update([FromForm] FaqViewModel faqViewModel)
         {
-            _logger.LogInformation(faqId);
-            if (faqId != faqViewModel.FaqId)
+            if (faqViewModel.FaqId == null)
             {
-                return NotFound();
+                return NotFound("Notfound");
             }
-            Faq faq = new Faq
-            {
-                FaqId = faqViewModel.FaqId,
-                Question = faqViewModel.Question,
-                Answer = faqViewModel.Answer,
-                // ModifiedBy = _currentUserService.UserId,
-                UserId = _currentUserService.UserId
-            };
-            var updatedResult = await _faqService.UpdateAsync(faq, faqId, NameOfPrimaryKey);
+            Faq faq = FaqViewModel.MapFaqViewModelToEntity(faqViewModel);
+            // var updatedResult = await _faqService.UpdateAsync(faq, faqViewModel, Constants.EntityKey.FAQ_ID);
+            // var updatedResult = await _faqService.UpdateAsync(faq, Constants.EntityKey.FAQ_ID, faq => faq.Question, faq => faq.Answer);
+            // var updatedResult = await _faqService.UpdateAsync(faq, Constants.EntityKey.FAQ_ID);
+            var updatedResult = await _faqService.UpdateAsync(faq);
             if (updatedResult.Item2)
             {
                 return Ok(updatedResult.Item1);
@@ -134,7 +144,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         public async Task<IActionResult> Delete(string faqId)
         {
             _logger.LogInformation(faqId);
-            if (await _faqService.DeleteAsync(faqId, NameOfPrimaryKey))
+            if (await _faqService.DeleteAsync(faqId, Constants.EntityKey.FAQ_ID))
             {
                 return RedirectToAction("Index");
             }

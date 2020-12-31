@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using ASP.NET_Core.ApplicationCore.Interfaces;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace ASP.NET_Core.ApplicationCore.Services
 {
@@ -31,14 +33,24 @@ namespace ASP.NET_Core.ApplicationCore.Services
             return await _repository.InsertAsync(input);
         }
 
-        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, TPrimaryKey id, string nameOfPrimaryKey)
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input)
         {
-            var entity = await GetEntityByIdAsync(id, nameOfPrimaryKey);
-            if (entity == null)
-            {
-                return (entity, false);
-            }
-            return (await _repository.UpdateAsync(input));
+            return await _repository.UpdateAsync(input);
+        }
+
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, object modifiedFields, string nameOfPrimaryKey)
+        {
+            return await _repository.UpdateAsync(input, modifiedFields, nameOfPrimaryKey);
+        }
+
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, string nameOfPrimaryKey,  params Expression<Func<TEntity, object>>[] properties)
+        {
+            return await _repository.UpdateAsync(input, nameOfPrimaryKey, properties);
+        }
+
+        public virtual async Task<(TEntity, bool)> UpdateAsync(TEntity input, string nameOfPrimaryKey)
+        {
+            return await _repository.UpdateAsync(input, nameOfPrimaryKey);
         }
 
         public virtual async Task<bool> DeleteAsync(TPrimaryKey id, string nameOfPrimaryKey)

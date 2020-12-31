@@ -15,5 +15,10 @@ namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
         public DateTime? LastModificationTime { get; set; }
         public User User { get; set; }
         public  ICollection<Course> Courses { get; set; }
+
+        public Subject()
+        {
+            SubjectId = "subject-" + Guid.NewGuid().ToString();
+        }
     }
 }

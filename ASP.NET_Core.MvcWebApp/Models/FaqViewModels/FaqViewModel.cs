@@ -21,6 +21,7 @@ namespace ASP.NET_Core.MvcWebApp.Models.FaqViewModels
         {
             return new Faq
             {
+                FaqId = faqViewModel.FaqId,
                 Answer = faqViewModel.Answer,
                 Question = faqViewModel.Question
             };
