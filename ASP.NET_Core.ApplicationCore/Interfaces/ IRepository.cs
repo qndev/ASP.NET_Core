@@ -1,13 +1,15 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace ASP.NET_Core.ApplicationCore.Interfaces
 {
     public interface IRepository<T, TPrimaryKey> where T : class
     {
-        Task<T> GetByIdAsync(TPrimaryKey id, string nameOfPrimaryKey);
+        Task<T> GetByIdAsync(TPrimaryKey id, string nameOfPrimaryKey, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<(T, bool)> InsertAsync(T entity);
         Task<(T, bool)> UpdateAsync(T entity);

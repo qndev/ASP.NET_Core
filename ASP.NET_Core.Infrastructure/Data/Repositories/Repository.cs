@@ -1,12 +1,14 @@
 using System;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using ASP.NET_Core.ApplicationCore.Interfaces;
-using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Reflection;
-using ASP.NET_Core.ApplicationCore.Extensions;
+using System.Threading.Tasks;
 using System.Linq.Expressions;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
+using ASP.NET_Core.ApplicationCore.Extensions;
+using ASP.NET_Core.ApplicationCore.Interfaces;
 
 namespace ASP.NET_Core.Infrastructure.Data.Repositories
 {
@@ -25,17 +27,22 @@ namespace ASP.NET_Core.Infrastructure.Data.Repositories
             _logger = logger;
         }
 
-        public virtual async Task<T> GetByIdAsync(TPrimaryKey id, string nameOfEntityKey)
+        public virtual async Task<T> GetByIdAsync(TPrimaryKey id, string nameOfEntityKey, Func<IQueryable<T>, IIncludableQueryable<T, object>> include = null)
         {
+            var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
+            IQueryable<T> query = _dbSet;
             // IEnumerable<Faq> allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
             // IQueryable<Faq> enumerablePeople = allPeople;
             // var allPeople = _dbContext.Faqs.Where(p => p.Answer.StartsWith("N"));
             // IEnumerable<Faq> activePeople = allPeople.Where(p => p.Id == 1);
-            var predicate = QueryableExtensions.EntityIdComparison<T, TPrimaryKey>(id, nameOfEntityKey);
-
+            query = query.AsNoTracking();
+            if (include != null)
+            {
+                query = include(query);
+            }
             _logger.LogInformation(predicate.ToString());
             // return await _dbSet.FirstOrDefaultAsync(predicate);
-            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate);
+            return await query.FirstOrDefaultAsync(predicate);
             // return await _dbSet.FindAsync(id);
         }
 

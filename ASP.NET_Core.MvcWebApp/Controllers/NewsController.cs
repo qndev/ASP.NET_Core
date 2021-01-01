@@ -63,7 +63,7 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
         [HttpGet]
         public async Task<ActionResult<Faq>> Details(string newsId)
         {
-            var newsDetails = await _newsService.GetNewsByIdAsync(newsId, Constants.EntityKey.NEWS_ID);
+            var newsDetails = await _newsService.GetNewsByIdAsync(newsId, Constants.EntityKey.NEWS_ID, source => source.Include(u => u.User));
             if (newsDetails == null)
             {
                 _logger.LogInformation("News Not found");
@@ -74,7 +74,12 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 NewsId = newsDetails.NewsId,
                 Title = newsDetails.Title,
                 Content = newsDetails.Content,
-                CreationTime = newsDetails.CreationTime
+                CreationTime = newsDetails.CreationTime,
+                User = new User
+                {
+                    LastName = newsDetails.User.LastName,
+                    Email = newsDetails.User.Email
+                }
             };
             return View(newsViewModel);
         }
