@@ -1,0 +1,79 @@
+@model PaginatedList<Faq>
+@{
+    ViewData["Title"] = "Faqs";
+    Layout = "_Layout";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Faqs</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">#ID</th>
+                            <th>Created By</th>
+                            <th>Email</th>
+                            <th>Question</th>
+                            <th>Answer</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FaqId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.User.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Question)
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => item.Answer)</td>
+                                <td class="user-management">
+                                    <div class="center-operations">
+                                        <a asp-action="Details" asp-route-id="@item.FaqId"><i id="model-details" class="fa fa-info-circle" aria-hidden="true"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@item.FaqId"><i id="edit-model" class="fa fa-edit" aria-hidden="true"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@item.FaqId"><i id="delete-model" class="fa fa-trash" aria-hidden="true"></i></a>
+                                        <form asp-action="Delete" asp-route-faqId="@item.FaqId">
+                                            <div class="form-actions no-color">
+                                                <input type="submit" value="Delete" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer clearfix">
+                @{
+                    Model.AspAction = "Index";
+                    // var PaginationData = Model;
+                }
+                @* @await Html.PartialAsync("../Shared/_Pagination.cshtml") *@
+                @await Component.InvokeAsync("Pagination", Model)
+            </div>
+        </div>
+    </div>
+</div>

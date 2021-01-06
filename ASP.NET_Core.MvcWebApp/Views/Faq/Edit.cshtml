@@ -1,0 +1,38 @@
+@model FaqViewModel
+@{
+    ViewData["Title"] = "Edit Faq";
+    Layout = "_Layout";
+}
+
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Edit Faq</h3>
+    </div>
+    <form asp-controller="Faq" asp-action="Update" asp-route-returnurl="@ViewData["ReturnUrl"]">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="card-body">
+            <input type="hidden" asp-for="FaqId" />
+            <span asp-validation-for="Question" class="text-danger"></span>
+            <div class="form-group">
+                <label for="inputEditQuestion">
+                    @Html.DisplayNameFor(vm => vm.Question)
+                </label>
+                <input asp-for="Question" type="text" class="form-control" id="inputEditQuestion" placeholder="Question">
+            </div>
+            <span asp-validation-for="Answer" class="text-danger"></span>
+            <div class="form-group">
+                <label for="inputEditAnswer">
+                    @Html.DisplayNameFor(vm => vm.Answer)
+                </label>
+                <input asp-for="Answer" type="text" class="form-control" id="inputEditAnswer" placeholder="Answer">
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

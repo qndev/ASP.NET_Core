@@ -1,7 +1,7 @@
 namespace ASP.NET_Core.ApplicationCore.Entities.Common
 {
-    public abstract class BaseEntity
+    public abstract class BaseEntity<TPrimaryKey>
     {
-        public int Id { get; set; }
+        public TPrimaryKey Id { get; set; }
     }
 }

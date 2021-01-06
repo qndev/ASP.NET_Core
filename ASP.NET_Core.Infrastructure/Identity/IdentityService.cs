@@ -1,27 +1,36 @@
-using System;
+using System.Transactions;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using ASP.NET_Core.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using ASP.NET_Core.ApplicationCore.Entities;
 using ASP.NET_Core.ApplicationCore.Constants;
+using ASP.NET_Core.ApplicationCore.Interfaces;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserService<User, string> _userService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly IDateTime _dateTime;
+
         public IdentityService(
             UserManager<ApplicationUser> userManager,
+            IUserService<User, string> userService,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<IdentityService> logger
+            ILogger<IdentityService> logger,
+            IDateTime dateTime
         )
         {
             _userManager = userManager;
+            _userService = userService;
             _signInManager = signInManager;
             _logger = logger;
+            _dateTime = dateTime;
         }
+
         public async Task<bool> LoginAsync(string email, string password, bool rememberMe = false)
         {
             var user = await _userManager.FindByEmailAsync(email);
@@ -78,7 +87,6 @@ namespace ASP.NET_Core.Infrastructure.Identity
         {
             var user = await _userManager.FindByEmailAsync(email);
             string responseMessage = "";
-            int userId = user.Id;
             if (user == null)
             {
                 responseMessage = ResponseMessage.USER_NOT_FOUND;
@@ -88,10 +96,10 @@ namespace ASP.NET_Core.Infrastructure.Identity
             {
                 responseMessage = ResponseMessage.EMAIL_NOT_CONFIRMED;
                 _logger.LogInformation("User has not been verified!");
-                return (responseMessage, userId);
+                return (responseMessage, ResponseMessage.ERROR_STATUS);
             }
             responseMessage = await _userManager.GeneratePasswordResetTokenAsync(user);
-            return (responseMessage, userId);
+            return (responseMessage + "" + user.Id, ResponseMessage.SUCCESS_STATUS);
         }
 
         public async Task<string> ResetPasswordAsync(string email, string token, string newPassword)
@@ -108,18 +116,54 @@ namespace ASP.NET_Core.Infrastructure.Identity
             }
             return ResponseMessage.ERROR_MESSAGE;
         }
+
         public async Task<(string, int)> RegisterAccountAsync(string userName, string email, string password)
         {
-            var user = new ApplicationUser { UserName = userName, Email = email };
-            var result = await _userManager.CreateAsync(user, password);
-            if (result.Succeeded)
+            using (var transactionScope = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+                TransactionScopeAsyncFlowOption.Enabled))
             {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                _logger.LogInformation("User created a new account with password.");
-                return (ResponseMessage.SUCCESS_MESSAGE, user.Id);
+                var code = "";
+                var createdUser = false;
+                try
+                {
+                    var user = new ApplicationUser { UserName = userName, Email = email };
+                    var result = await _userManager.CreateAsync(user, password);
+                    if (result.Succeeded)
+                    {
+                        code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        _logger.LogInformation("User created a new account with password.");
+                        User userEntity = new User
+                        {
+                            UserId = user.Id,
+                            Email = user.Email,
+                            FirstName = "N/A",
+                            LastName = "N/A",
+                            CreationTime = _dateTime.Now
+                        };
+                        _logger.LogInformation("Created Identity User with Id: " + userEntity.UserId);
+                        var createdUserEntity = _userService.CreateUserAsync(userEntity);
+                        if (createdUserEntity.Result.Item2)
+                        {
+                            createdUser = true;
+                        }
+                    }
+                    if (createdUser)
+                    {
+                        transactionScope.Complete();
+                        return (code + "SEPARATOR" + user.Id, ResponseMessage.SUCCESS_STATUS);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    _logger.LogWarning(ex.Message);
+                }
+
+                return (ResponseMessage.ERROR_MESSAGE, ResponseMessage.ERROR_STATUS);
             }
-            return (ResponseMessage.ERROR_MESSAGE, ResponseMessage.ERROR_STATUS);
         }
+
         public async Task<string> ConfirmEmailAsync(string userId, string token)
         {
             var user = await _userManager.FindByIdAsync(userId);

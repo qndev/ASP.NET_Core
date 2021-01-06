@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Questions");
+            builder.HasKey(q => q.QuestionId);
+            builder.Property(q => q.QuestionId)
+                .HasColumnType("varchar(256)");
             builder.HasOne(q => q.Exercise)
                 .WithMany(e => e.Questions)
                 .HasForeignKey(q => q.ExerciseId);

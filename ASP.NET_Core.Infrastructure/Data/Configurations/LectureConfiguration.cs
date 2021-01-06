@@ -10,6 +10,9 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
         {
             base.Configure(builder);
             builder.ToTable("Lectures");
+            builder.HasKey(l => l.LectureId);
+            builder.Property(l => l.LectureId)
+                .HasColumnType("varchar(256)");
             builder.HasMany(l => l.Exercises)
                 .WithOne(e => e.Lecture);
             builder.HasMany(l => l.CourseLectures)
@@ -24,12 +27,13 @@ namespace ASP.NET_Core.Infrastructure.Data.Configurations
                 .HasColumnType("tinyint(4)")
                 .IsRequired();
             builder.Property(l => l.DoccumentUrl)
-                .HasColumnType("varchar(255)")
+                .HasColumnType("varchar(256)")
                 .IsRequired();
-            builder.Property(l => l.CreatedBy)
+            builder.Property(l => l.UserId)
                 .IsRequired();
             builder.Property(l => l.ModifiedBy)
-                .IsRequired();
+                .HasColumnType("varchar(256)")
+                .IsRequired(false);
         }
     }
 }

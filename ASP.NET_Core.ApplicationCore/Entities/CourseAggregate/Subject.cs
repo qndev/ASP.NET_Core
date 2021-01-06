@@ -4,15 +4,21 @@ using ASP.NET_Core.ApplicationCore.Entities.Common;
 
 namespace ASP.NET_Core.ApplicationCore.Entities.CourseAggregate
 {
-    public class Subject : BaseEntity, ICreator, IHasCreationTime, IHasDeletionTime, IHasModificationTime
+    public class Subject : IHasCreationTime, IHasDeletionTime, IHasModificationTime
     {
+        public string SubjectId { get; set; }
         public string Name { get; set; }
-        public int CreatedBy { get; set; }
-        public int ModifiedBy { get; set; }
-        public DateTime CreationTime { get; set; }
+        public string UserId { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? CreationTime { get; set; }
         public DateTime? DeletionTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
         public User User { get; set; }
         public  ICollection<Course> Courses { get; set; }
+
+        public Subject()
+        {
+            SubjectId = "subject-" + Guid.NewGuid().ToString();
+        }
     }
 }

@@ -5,9 +5,17 @@ using ASP.NET_Core.Infrastructure.Identity.IdentityConfigurations;
 
 namespace ASP.NET_Core.Infrastructure.Identity
 {
-    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, IdentityUserClaim<int>, ApplicationUserRole, IdentityUserLogin<int>,
-        IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public class AppIdentityDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string, ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
+        ApplicationRoleClaim, ApplicationUserToken>
     {
+        private const string UserTable = "ElcUsers";
+        private const string RoleTable = "ElcRoles";
+        private const string UserRoleTable = "ElcUserRoles";
+        private const string UserClaimTable = "ElcUserClaims";
+        private const string UserLoginTable = "ElcUserLogins";
+        private const string RoleClaimTable = "ElcRoleClaims";
+        private const string UserTokenTable = "ElcUserTokens";
+
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
             : base(options)
         {
@@ -20,34 +28,13 @@ namespace ASP.NET_Core.Infrastructure.Identity
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
             // builder.ApplyConfiguration(new AppIdentityConfiguration<ApplicationUser>("AppUsers"));
-            builder.ApplyConfiguration(new ApplicationUserConfiguration());
-
-            builder.ApplyConfiguration(new ApplicationRoleConfiguration());
-
-            builder.Entity<IdentityUserClaim<int>>(b =>
-            {
-                b.ToTable("ElcUserClaims");
-            });
-
-            builder.Entity<IdentityUserLogin<int>>(b =>
-            {
-                b.ToTable("ElcUserLogins");
-            });
-
-            builder.Entity<IdentityUserToken<int>>(b =>
-            {
-                b.ToTable("ElcUserTokens");
-            });
-
-            builder.Entity<IdentityRoleClaim<int>>(b =>
-            {
-                b.ToTable("ElcRoleClaims");
-            });
-
-            builder.Entity<ApplicationUserRole>(b =>
-            {
-                b.ToTable("ElcUserRoles");
-            });
+            builder.ApplyConfiguration(new ApplicationUserConfiguration(UserTable));
+            builder.ApplyConfiguration(new ApplicationRoleConfiguration(RoleTable));
+            builder.ApplyConfiguration(new ApplicationUserRoleConfiguration(UserRoleTable));
+            builder.ApplyConfiguration(new ApplicationUserClaimConfiguration(UserClaimTable));
+            builder.ApplyConfiguration(new ApplicationUserLoginConfiguration(UserLoginTable));
+            builder.ApplyConfiguration(new ApplicationRoleClaimConfiguration(RoleClaimTable));
+            builder.ApplyConfiguration(new ApplicationUserTokenConfiguration(UserTokenTable));
         }
     }
 

@@ -8,31 +8,38 @@ using ASP.NET_Core.ApplicationCore.Interfaces;
 using ASP.NET_Core.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
 using ASP.NET_Core.ApplicationCore.Constants;
+using ASP.NET_Core.ApplicationCore.Entities;
 
 namespace ASP.NET_Core.MvcWebApp.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IIdentityService _identityService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private  readonly  ICurrentUserService _currentUserService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
-            IHttpContextAccessor httpContextAccessor,
+            //IHttpContextAccessor httpContextAccessor,
             IIdentityService identityService,
             UserManager<ApplicationUser> userManager,
+            RoleManager<ApplicationRole> roleManager,
             SignInManager<ApplicationUser> signInManager,
+            ICurrentUserService currentUserService,
             IEmailSender emailSender,
             ILogger<AccountController> logger)
         {
-            _httpContextAccessor = httpContextAccessor;
+            //_httpContextAccessor = httpContextAccessor;
             _identityService = identityService;
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
+            _currentUserService = currentUserService;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -88,9 +95,10 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
-                 _logger.LogInformation(userName);
-                if (model.Email == userName)
+                //var userName = _httpContextAccessor.HttpContext.User.Identity.Name;
+                //_logger.LogInformation(userName);
+                var currentUserEmail = _currentUserService.UserEmail;
+                if (model.Email == currentUserEmail)
                 {
                     if (await _identityService.ChangePasswordAsync(model.Email, model.CurrentPassword, model.NewPassword))
                     {
@@ -129,7 +137,8 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
                 {
                     return View("VerifyEmail");
                 }
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = result.Item2, code = result.Item1 }, protocol: HttpContext.Request.Scheme);
+                var separatedCodeAndUserId = this.SplitString(result.Item1);
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = separatedCodeAndUserId[1], code = separatedCodeAndUserId[0] }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
                    "Please reset your password by clicking here: <a href=\"" + callbackUrl + "\">link</a>");
                 return View("ForgotPasswordConfirmation");
@@ -197,16 +206,16 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             if (ModelState.IsValid)
             {
                 var registerAccountResult = await _identityService.RegisterAccountAsync(model.Email, model.Email, model.Password);
-                if (registerAccountResult.Item1.Equals(ResponseMessage.SUCCESS_MESSAGE))
+                if (registerAccountResult.Item2 == ResponseMessage.SUCCESS_STATUS)
                 {
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = registerAccountResult.Item2, code = registerAccountResult.Item1 }, protocol: HttpContext.Request.Scheme);
+                    var separatedCodeAndUserId = this.SplitString(registerAccountResult.Item1);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = separatedCodeAndUserId[1], code = separatedCodeAndUserId[0] }, protocol: HttpContext.Request.Scheme);
                     await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                         "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
                     // await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
                     return RedirectToLocal("/Account/Login");
                 }
-                _logger.LogInformation(registerAccountResult.Item1);
                 return View("Error");
                 // AddErrors(result);
             }
@@ -254,6 +263,12 @@ namespace ASP.NET_Core.MvcWebApp.Controllers
             {
                 return RedirectToAction(nameof(HomeController.Index), "Home");
             }
+        }
+
+        private string[] SplitString(string splitString)
+        {
+            string[] parts = splitString.Split("SEPARATOR");
+            return parts;
         }
 
         #endregion
